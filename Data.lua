@@ -4,6 +4,11 @@ data = {}
 SCREEN_WIDTH = 240
 SCREEN_HEIGHT = 136
 
+Player.ROLL_TIME = 0.2
+
+Player.SPEED = 54
+Player.ROLL_SPEED = Player.SPEED * 1.8
+
 Player.sprite = {
     stay = {
         i = 1,
@@ -15,7 +20,16 @@ Player.sprite = {
         {id=257, T=0.08},
         {id=258, T=0.09},
         {id=259, T=0.08},
-    }
+    },
+    roll = {
+        i = 1,
+        {id=320, T=Player.ROLL_TIME / 6},
+        {id=321, T=Player.ROLL_TIME / 6},
+        {id=322, T=Player.ROLL_TIME / 6},
+        {id=323, T=Player.ROLL_TIME / 6},
+        {id=324, T=Player.ROLL_TIME / 6},
+        {id=325, T=-1},
+    },
 }
 Player.HITBOX = { -- обе границы включены
     x1 = 2, y1 = 2,

@@ -5,10 +5,18 @@ function Player:new(x, y)
     local object = {
         x = x,
         y = y,
-        speed = 50,
+        speed = Player.SPEED,
 
         -- i-фреймы
         i_time = 0,
+
+        is_roll = false,
+        roll_dx = 0,
+        roll_dy = 0,
+
+        -- последние ненулевые. НЕ ИСПОЛЬЗУЕТСЯ
+        last_input_x = 0,
+        last_input_y = 0,
 
         max_hp = Player.HP,
         hp = Player.HP,
@@ -17,6 +25,7 @@ function Player:new(x, y)
         hitbox = Player.HITBOX,
         sprite = table.copy(Player.sprite.stay),
         run_status = 'stay',
+            -- run
         flip = 0,
     }
 
@@ -27,6 +36,7 @@ end
 function Player:update()
     local input_x = 0
     local input_y = 0
+    local is_roll = false
     if key.left() then
         input_x = input_x - 1
     end
@@ -38,6 +48,15 @@ function Player:update()
     end
     if key.down() then
         input_y = input_y + 1
+    end
+    if key.action() then
+        is_roll = true
+    end
+
+    if self.is_roll then
+        input_x = self.roll_dx
+        input_y = self.roll_dy
+        is_roll = false
     end
 
     local k = 1
@@ -67,6 +86,30 @@ function Player:update()
     end
     Anime.tick(self.sprite)
 
+    -- проверяем, что roll начался 🍱🍣😋
+    if is_roll and (input_x ~= 0 or input_y ~= 0) then
+        self.i_time = Player.ROLL_TIME
+        self.is_roll = true
+        -- if input_x == 0 and input_y == 0 then
+        --     self.roll_dx = self.last_input_x
+        --     self.roll_dy = self.last_input_y
+        -- else
+        self.roll_dx = input_x
+        self.roll_dy = input_y
+        self.speed = Player.ROLL_SPEED
+        self.sprite = table.copy(Player.sprite.roll)
+    end
+    -- проверяем что roll закончился 🍱😔
+    if self.i_time == 0 and self.is_roll then
+        self.is_roll = false
+        self.sprite = table.copy(Player.sprite.run)
+        self.speed = Player.SPEED
+    end
+
+    if input_x ~= 0 or input_y ~= 0 then
+        self.last_input_x = input_x
+        self.last_input_y = input_y
+    end
     self.i_time = Time.tick(self.i_time)
 end
 
