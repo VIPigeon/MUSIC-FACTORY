@@ -1,12 +1,18 @@
+
 C0 = 0
 
 require("Math")
 require("Table")
+require("Time")
 
 require("Anime")
+require("Collision")
+
 require("Player")
+require("Enemies") -- все противники в одном файле ⚛️
+require("Director") -- Дирижер 
 require("key")
-require("Time")
+require("Bullet")
 require("Game")
 
 -- Устанавливает все константы, привязанные к классам

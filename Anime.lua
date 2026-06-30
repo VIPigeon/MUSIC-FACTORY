@@ -12,14 +12,19 @@ function Anime.tick(animation)
     if a.t == 0 or a.t == nil then
         a.t = a.T
     end
+
+    if a.t < 0 then  -- статический кадр
+        return
+    end
+
     a.t = Time.tick(a.t)
     if a.t == 0 then
         -- TODO: погуглить: безопасно ли брать размер таблицы, в которой есть как именные поля, так и поля по числу?
-        if animation.is_loop then
-            animation.i = animation.i % #animation + 1
-        else
-            animation.i = math.min(animation.i + 1, #animation)
-        end
+        -- if animation.is_loop then
+        animation.i = animation.i % #animation + 1
+        -- else
+            -- animation.i = math.min(animation.i + 1, #animation)
+        -- end
     end
 end
 

@@ -7,10 +7,19 @@ function Player:new(x, y)
         y = y,
         speed = 50,
 
+        -- i-фреймы
+        i_time = 0,
+
+        max_hp = Player.HP,
+        hp = Player.HP,
+
+        -- hitbox относителен
+        hitbox = Player.HITBOX,
         sprite = table.copy(Player.sprite.stay),
         run_status = 'stay',
         flip = 0,
     }
+
     setmetatable(object, self)
     return object
 end
@@ -57,10 +66,36 @@ function Player:update()
         end
     end
     Anime.tick(self.sprite)
+
+    self.i_time = Time.tick(self.i_time)
 end
 
 function Player:draw()
+    local hp = self.hp
+    local x = 0
+    local dx = 9
+    local y = 0
+    for i = 1, math.floor(Player.HP / 2) do
+        if hp == 1 then
+            spr(HALF_HEART_SPRITE, x, y, C0, 1)
+        elseif hp <= 0 then
+            spr(EMPTY_HEART_SPRITE, x, y, C0, 1)
+        else
+            spr(FULL_HEART_SPRITE, x, y, C0, 1)
+        end
+        x = x + dx
+        hp = hp - 2
+    end
+
     spr(self.sprite[self.sprite.i].id, self.x, self.y, C0,1, self.flip)
+end
+
+function Player:hurt()
+    if self.i_time > 0 then
+        return
+    end
+    self.i_time = Player.I_TIME
+    self.hp = self.hp - 1
 end
 
 Player.__index = Player
