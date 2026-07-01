@@ -6,6 +6,7 @@ require("Table")
 require("Time")
 
 require("Anime")
+require("TextWithOutline")
 require("Collision")
 
 require("Player")

@@ -4,10 +4,17 @@ data = {}
 SCREEN_WIDTH = 240
 SCREEN_HEIGHT = 136
 
-Player.ROLL_TIME = 0.35
+Player.ROLL_TIME = 0.25
 
 Player.SPEED = 54
-Player.ROLL_SPEED = Player.SPEED * 1.35
+Player.ROLL_SPEED = Player.SPEED * 2.3
+Player.ROLL_COOLDOWN = 0.21
+Player.ROLL_BUFFER = 0.0
+
+-- начальная частота оплаты
+Player.PAYMENT_FREQ = 0.15
+-- коэффициент ускорения оплаты
+Player.PAYMENT_ACC = 0.9
 
 Player.sprite = {
     stay = {
@@ -83,7 +90,15 @@ PistonEnemy.sprite = {
     },
 }
 PistonEnemy.HITBOX = {x1=1, y1=1, x2=6, y2=7}
-PistonEnemy.ACTIVATION_HITBOX = {x1=-2, y1=-2, x2=9, y2=10}
+PistonEnemy.INTERBOX = {x1=-4, y1=-3, x2=13, y2=17} 
+-- hitbox for INTERaction 🤪
 
 
-Bullet.speed = 37
+CircleEnemy.R = 5
+CircleEnemy.PULLBACK_DISTANCE = 2
+CircleEnemy.HITBOX = {x=0, y=0, r=CircleEnemy.R, is_circle=true}
+CircleEnemy.INTERBOX = {x=0, y=0, r=CircleEnemy.R+6, is_circle=true}
+-- CircleEnemy.PRERELEASE_TIME = 0.08 -- задержка появления
+
+
+Bullet.speed = 39
