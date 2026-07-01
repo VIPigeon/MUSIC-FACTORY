@@ -33,6 +33,27 @@ function Player:new(x, y)
     return object
 end
 
+function Player:move_as_possible(dx, dy)
+    self.x = self.x + dx
+    local hb1 = Collision.get_rect_by_object(self)
+    for _, e in ipairs(game.enemies) do
+        local hb2 = Collision.get_rect_by_object(e)
+        if Collision.check(hb1, hb2) then
+            self.x = self.x - dx
+            break
+        end
+    end
+    self.y = self.y + dy
+    hb1 = Collision.get_rect_by_object(self)
+    for _, e in ipairs(game.enemies) do
+        local hb2 = Collision.get_rect_by_object(e)
+        if Collision.check(hb1, hb2) then
+            self.y = self.y - dy
+            break
+        end
+    end
+end
+
 function Player:update()
     local input_x = 0
     local input_y = 0
@@ -64,8 +85,10 @@ function Player:update()
         k = 1 / math.sqrt(2)
     end
 
-    self.x = self.x + input_x * self.speed * k * Time.dt()
-    self.y = self.y + input_y * self.speed * k * Time.dt()
+    self:move_as_possible(
+        input_x * self.speed * k * Time.dt(),
+        input_y * self.speed * k * Time.dt()
+    )
 
     if input_x < 0 then
         self.flip = 1
@@ -131,6 +154,7 @@ function Player:draw()
     end
 
     spr(self.sprite[self.sprite.i].id, self.x, self.y, C0,1, self.flip)
+    print(self.speed, 0, 10)
 end
 
 function Player:hurt()

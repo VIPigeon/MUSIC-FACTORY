@@ -21,7 +21,7 @@ function game.update()
         for _, b in ipairs(game.bullets) do
             b:update()
             local b_rect = Collision.get_rect_by_object(b)
-            if Collision.rect(player_rect, b_rect) then
+            if Collision.check(player_rect, b_rect) then
                 game.player:hurt()
             end
         end

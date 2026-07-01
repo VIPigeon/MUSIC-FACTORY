@@ -4,10 +4,10 @@ data = {}
 SCREEN_WIDTH = 240
 SCREEN_HEIGHT = 136
 
-Player.ROLL_TIME = 0.2
+Player.ROLL_TIME = 0.35
 
 Player.SPEED = 54
-Player.ROLL_SPEED = Player.SPEED * 1.8
+Player.ROLL_SPEED = Player.SPEED * 1.35
 
 Player.sprite = {
     stay = {
@@ -23,11 +23,11 @@ Player.sprite = {
     },
     roll = {
         i = 1,
-        {id=320, T=Player.ROLL_TIME / 6},
-        {id=321, T=Player.ROLL_TIME / 6},
-        {id=322, T=Player.ROLL_TIME / 6},
-        {id=323, T=Player.ROLL_TIME / 6},
-        {id=324, T=Player.ROLL_TIME / 6},
+        {id=320, T=Player.ROLL_TIME / 7},
+        {id=321, T=Player.ROLL_TIME / 7},
+        {id=322, T=Player.ROLL_TIME / 7},
+        {id=323, T=Player.ROLL_TIME / 7},
+        {id=324, T=Player.ROLL_TIME / 7 * 2},
         {id=325, T=-1},
     },
 }
@@ -44,6 +44,16 @@ EMPTY_HEART_SPRITE = 262
 
 
 PistonEnemy.sprite = {
+    inactive = {
+        i = 1,
+        {id = 464, T = -1},
+    },
+    activating = {
+        i = 1,
+        {id = 469, T = 0.05},
+        {id = 464, T = 0.05},
+    },
+
     warning = {
         i = 1,
         -- {id = 496, T = -1},
@@ -72,6 +82,8 @@ PistonEnemy.sprite = {
         {id = 469, T = -1},
     },
 }
+PistonEnemy.HITBOX = {x1=1, y1=1, x2=6, y2=7}
+PistonEnemy.ACTIVATION_HITBOX = {x1=-2, y1=-2, x2=9, y2=10}
 
 
 Bullet.speed = 37

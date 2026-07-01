@@ -1,5 +1,5 @@
 Collision = {}
-function Collision.rect(r1, r2)
+function Collision.check(r1, r2)
     if math.floor(r1.x1) > math.floor(r2.x2) or
         math.floor(r2.x1) > math.floor(r1.x2) or
         math.floor(r1.y1) > math.floor(r2.y2) or
@@ -31,5 +31,5 @@ end
 --         y1 = obj2.y + obj2.hitbox.y1,
 --         y2 = obj2.y + obj2.hitbox.y2,
 --     }
---     return Collision.rect(r1, r2)
+--     return Collision.check(r1, r2)
 -- end

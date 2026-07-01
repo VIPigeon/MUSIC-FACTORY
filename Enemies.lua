@@ -19,7 +19,9 @@ function PistonEnemy:new(x, y)
     local object = {
         x = x,
         y = y,
-        sprite = table.copy(PistonEnemy.sprite.release)
+        sprite = table.copy(PistonEnemy.sprite.release),
+        hitbox = PistonEnemy.HITBOX,
+        activation_hitbox = PistonEnemy.HITBOX,
     }
     setmetatable(object, self)
     return object
