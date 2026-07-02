@@ -100,5 +100,7 @@ CircleEnemy.HITBOX = {x=0, y=0, r=CircleEnemy.R, is_circle=true}
 CircleEnemy.INTERBOX = {x=0, y=0, r=CircleEnemy.R+6, is_circle=true}
 -- CircleEnemy.PRERELEASE_TIME = 0.08 -- задержка появления
 
+Enemy.default_cost = 0
+
 
 Bullet.speed = 39

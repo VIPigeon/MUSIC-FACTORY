@@ -24,7 +24,7 @@ function PistonEnemy:new(x, y)
         interbox = PistonEnemy.INTERBOX,
 
         is_active = false,
-        cost = 10,
+        cost = Enemy.default_cost,
     }
     setmetatable(object, self)
     return object
@@ -114,7 +114,7 @@ function CircleEnemy:new(x, y)
         -- -1 — костыль для пули 3×3
 
         is_active = false,
-        cost = 10,
+        cost = Enemy.default_cost,
 
         -- вместо спрайта
         status = 'release',

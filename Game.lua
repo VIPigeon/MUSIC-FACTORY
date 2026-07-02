@@ -1,11 +1,15 @@
 
 game = {}
 
+local temp = 20
 function game.init()
     game.status = 'action'
     game.player = Player:new(100, 100)
     Director.init()
-    game.enemies = {PistonEnemy:new(50, 50), CircleEnemy:new(150, 50)}  -- список всех противников
+    game.enemies = {
+        PistonEnemy:new(math.random(temp, SCREEN_WIDTH - temp), math.random(temp, SCREEN_HEIGHT - temp)),
+        CircleEnemy:new(math.random(temp, SCREEN_WIDTH - temp), math.random(temp, SCREEN_HEIGHT - temp)),
+    }  -- список всех противников по ролям
     game.bullets = {}
     game.money = 9999
 end
@@ -17,7 +21,7 @@ function game.update()
         local player_rect = Collision.get_hitbox_by_object(game.player)
 
         local is_player_pay = false
-        for _, e in ipairs(game.enemies) do
+        for _, e in pairs(game.enemies) do
             e:update()
             local eb = Collision.get_interbox_by_object(e)
             if Collision.check(player_rect, eb) then
@@ -42,7 +46,7 @@ end
 
 function game.draw()
     if game.status == 'action' then
-        for _, e in ipairs(game.enemies) do
+        for _, e in pairs(game.enemies) do
             e:draw()
         end
         for _, b in ipairs(game.bullets) do

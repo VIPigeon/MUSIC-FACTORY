@@ -11,6 +11,7 @@ function Player:new(x, y)
         i_time = 0,
 
         is_roll = false,
+        roll_time = 0,
         roll_dx = 0,
         roll_dy = 0,
         roll_cooldown = 0,  -- перезарядка переката
@@ -125,7 +126,8 @@ function Player:update()
             self.roll_buffer = (self.roll_cooldown < self.ROLL_BUFFER)
         else
             self.roll_buffer = false
-            self.i_time = Player.ROLL_TIME
+            -- self.i_time = Player.ROLL_TIME
+            self.roll_time = Player.ROLL_TIME
             self.is_roll = true
             -- if input_x == 0 and input_y == 0 then
             --     self.roll_dx = self.last_input_x
@@ -138,7 +140,7 @@ function Player:update()
         end
     end
     -- проверяем что roll закончился 🍱😔
-    if self.i_time == 0 and self.is_roll then
+    if self.roll_time == 0 and self.is_roll then
         self.is_roll = false
         self.sprite = table.copy(Player.sprite.run)
         self.speed = Player.SPEED
@@ -151,6 +153,7 @@ function Player:update()
     end
     Anime.tick(self.sprite)
     self.i_time = Time.tick(self.i_time)
+    self.roll_time = Time.tick(self.roll_time)
     self.roll_cooldown = Time.tick(self.roll_cooldown)
     self.payment_t = Time.tick(self.payment_t)
 end
@@ -176,7 +179,7 @@ function Player:draw()
 end
 
 function Player:hurt()
-    if self.i_time > 0 then
+    if self.i_time > 0 or self.roll_time > 0 then
         return
     end
     self.i_time = Player.I_TIME
