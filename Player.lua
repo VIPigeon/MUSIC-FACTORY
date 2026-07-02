@@ -44,22 +44,22 @@ end
 function Player:move_as_possible(dx, dy)
     self.x = self.x + dx
     local hb1 = Collision.get_hitbox_by_object(self)
-    for _, e in ipairs(game.enemies) do
-        local hb2 = Collision.get_hitbox_by_object(e)
-        if Collision.check(hb1, hb2) then
-            self.x = self.x - dx
-            break
-        end
-    end
+    -- for _, e in pairs(game.enemies) do
+    --     local hb2 = Collision.get_hitbox_by_object(e)
+    --     if Collision.check(hb1, hb2) then
+    --         self.x = self.x - dx
+    --         break
+    --     end
+    -- end
     self.y = self.y + dy
     hb1 = Collision.get_hitbox_by_object(self)
-    for _, e in ipairs(game.enemies) do
-        local hb2 = Collision.get_hitbox_by_object(e)
-        if Collision.check(hb1, hb2) then
-            self.y = self.y - dy
-            break
-        end
-    end
+    -- for _, e in pairs(game.enemies) do
+    --     local hb2 = Collision.get_hitbox_by_object(e)
+    --     if Collision.check(hb1, hb2) then
+    --         self.y = self.y - dy
+    --         break
+    --     end
+    -- end
 end
 
 -- function Player( ... )

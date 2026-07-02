@@ -8,6 +8,9 @@ require("Time")
 require("Anime")
 require("TextWithOutline")
 require("Collision")
+require("Settings")
+
+require("Sheet")
 
 require("Player")
 require("Enemies") -- все противники в одном файле ⚛️

@@ -39,9 +39,9 @@ function PistonEnemy:prepare()
 end
 
 function PistonEnemy:attack()
-    if not self.is_active then
-        return
-    end
+    -- if not self.is_active then
+    --     return
+    -- end
 
     self.sprite = table.copy(PistonEnemy.sprite.attack)
 
@@ -57,17 +57,17 @@ function PistonEnemy:attack()
 end
 
 function PistonEnemy:release()
-    if not self.is_active then
-        return
-    end
+    -- if not self.is_active then
+    --     return
+    -- end
 
     self.sprite = table.copy(PistonEnemy.sprite.release)
 end
 
 function PistonEnemy:warning()
-    if not self.is_active then
-        return
-    end
+    -- if not self.is_active then
+    --     return
+    -- end
 
     self.sprite = table.copy(PistonEnemy.sprite.warning)
 end
@@ -129,30 +129,30 @@ function CircleEnemy:new(x, y)
 end
 
 function CircleEnemy:prepare()
-    if not self.is_active then
-        return
-    end
+    -- if not self.is_active then
+    --     return
+    -- end
     self.status = 'prepare'
 end
 
 function CircleEnemy:attack()
-    if not self.is_active then
-        return
-    end
+    -- if not self.is_active then
+    --     return
+    -- end
     self.status = 'attack'
 end
 
 function CircleEnemy:release()
-    if not self.is_active then
-        return
-    end
+    -- if not self.is_active then
+    --     return
+    -- end
     self.status = 'release'
 end
 
 function CircleEnemy:warning()
-    if not self.is_active then
-        return
-    end
+    -- if not self.is_active then
+    --     return
+    -- end
     self.status = 'warning'
 end
 

@@ -4,9 +4,10 @@ Director = {}
 function Director.init()
     -- будет работать по метроному
     -- но сейчас все максимально просто, потом я это все снесу
-    Director.T = 0.2
-    Director.tick_counter = 0
+    Director.T = 60 / Settings.bpm
     Director.t = Director.T
+
+    Director.beat_counter = 0
 end
 
 function Director:update()
@@ -17,25 +18,27 @@ function Director:update()
         -- мама, я хочу свою event-систему
         -- нет, у нас есть event-система дома
         -- event-система дома:
-        local xk = Director.tick_counter % 5
-        if xk == 1 then
-            for _, e in ipairs(game.enemies) do
-                e:prepare()
+        for part, e in pairs(game.enemies) do
+            if not e.is_active then
+                goto continue
             end
-        elseif xk == 2 then
-            for _, e in ipairs(game.enemies) do
+            local current_i = (Director.beat_counter - 1) % #Sheet[part].normal + 1
+            local prev_i = (Director.beat_counter - 2) % #Sheet[part].normal + 1
+            local next_i = (Director.beat_counter) % #Sheet[part].normal + 1
+            local current_note = Sheet[part].normal[current_i]
+            local prev_note = Sheet[part].normal[prev_i]
+            local next_note = Sheet[part].normal[next_i]
+            if current_note then
                 e:attack()
-            end
-        elseif xk == 3 then
-            for _, e in ipairs(game.enemies) do
+                current_note:play()
+            elseif prev_note then
                 e:release()
             end
-        elseif xk == 0 then
-            for _, e in ipairs(game.enemies) do
-                e:warning()
+            if next_note then
+                e:prepare()
             end
+            ::continue::
         end
-
-        Director.tick_counter = Director.tick_counter + 1
+        Director.beat_counter = Director.beat_counter + 1
     end
 end

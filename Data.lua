@@ -1,5 +1,5 @@
 
-data = {}
+BEATS_IN_TACT = 16 -- мы все умрем если это изменить
 
 SCREEN_WIDTH = 240
 SCREEN_HEIGHT = 136
@@ -102,5 +102,6 @@ CircleEnemy.INTERBOX = {x=0, y=0, r=CircleEnemy.R+6, is_circle=true}
 
 Enemy.default_cost = 0
 
-
 Bullet.speed = 39
+
+Sheet.load()
