@@ -49,6 +49,8 @@ end
 
 function game.draw()
     if game.status == 'action' then
+        rectb(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, 6)
+
         for _, e in pairs(game.enemies) do
             e:draw()
         end
@@ -56,7 +58,7 @@ function game.draw()
             b:draw()
         end
 
-        print(game.money, 0, 9, 4)
+        print(game.money, 2, 11, 4)
         game.player:draw()
     end
 end

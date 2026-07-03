@@ -43,16 +43,34 @@ end
 
 function Player:move_as_possible(dx, dy)
     self.x = self.x + dx
-    local hb1 = Collision.get_hitbox_by_object(self)
-    -- for _, e in pairs(game.enemies) do
-    --     local hb2 = Collision.get_hitbox_by_object(e)
-    --     if Collision.check(hb1, hb2) then
-    --         self.x = self.x - dx
-    --         break
-    --     end
-    -- end
     self.y = self.y + dy
-    hb1 = Collision.get_hitbox_by_object(self)
+
+    -- смещения под картинку игрока
+    -- если изменить внешность игрока, то я умираю
+    local x1 = self.hitbox.x1 - 1
+    local x2 = self.hitbox.x2 + 2
+    local y1 = self.hitbox.y1 - 2
+    local y2 = self.hitbox.y2 + 3
+
+    -- Горизонталь
+    if self.x + x1 < 0 then
+        self.x = -x1
+    elseif self.x + x2 > SCREEN_WIDTH then
+        self.x = SCREEN_WIDTH - x2
+    end
+
+    -- Вертикаль
+    if self.y + y1 < 0 then
+        self.y = -y1
+    elseif self.y + y2 > SCREEN_HEIGHT then
+        self.y = SCREEN_HEIGHT - y2
+    end
+    -- local hb1 = Collision.get_hitbox_by_object(self)
+    -- hb1 = Collision.get_hitbox_by_object(self)
+
+
+
+
     -- for _, e in pairs(game.enemies) do
     --     local hb2 = Collision.get_hitbox_by_object(e)
     --     if Collision.check(hb1, hb2) then
@@ -160,9 +178,10 @@ end
 
 function Player:draw()
     local hp = self.hp
-    local x = 0
+
+    local x = 2
     local dx = 9
-    local y = 0
+    local y = 2
     for i = 1, math.floor(Player.HP / 2) do
         if hp == 1 then
             spr(HALF_HEART_SPRITE, x, y, C0, 1)
