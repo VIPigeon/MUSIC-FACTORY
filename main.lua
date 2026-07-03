@@ -9,11 +9,17 @@ require("Anime")
 require("TextWithOutline")
 require("Collision")
 require("Settings")
+require("ChangeScreenAnimator")
+require("RestartDialog")
 
+-- Невероятно душные модули. Я их ненавижу
 require("Sheet")
+require("Generation")
+--
 
 require("Player")
 require("Enemies") -- все противники в одном файле ⚛️
+require("Discoball") -- кроме диско-шара
 require("Director") -- Дирижер 
 require("key")
 require("Bullet")

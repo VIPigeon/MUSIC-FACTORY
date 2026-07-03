@@ -18,6 +18,11 @@ function key.right()
 end
 
 function key.action()
-    -- TODO: добавить shift, space, enter
+    -- ЛУЧШИЙ БАН ПЕРЕКАТА
+    -- return btnp(4)
+    return false
+end
+
+function key.ok()
     return btnp(4)
 end

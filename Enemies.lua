@@ -1,5 +1,11 @@
 
+-- здесь смешным комментов нет. мне было не до шуток
+
 Enemy = {}
+function Enemy:move(x, y)
+    self.x = x
+    self.y = y
+end
 -- function Enemy:draw()
 --     spr(self.sprite[self.sprite.i].id, self.x, self.y, C0,1)
 -- end
@@ -13,6 +19,11 @@ Enemy = {}
 -- function Enemy:attack()
 -- end
 
+function Enemy:earn_money()
+    game.money = game.money + 1
+    self.money_time = Enemy.MONEY_TIME -- для анимации
+end
+
 
 PistonEnemy = table.copy(Enemy)
 function PistonEnemy:new(x, y)
@@ -25,6 +36,9 @@ function PistonEnemy:new(x, y)
 
         is_active = false,
         cost = Enemy.default_cost,
+
+        money_time = 0,
+        fear_time = 0, -- время страха призыва
     }
     setmetatable(object, self)
     return object
@@ -74,11 +88,14 @@ end
 
 function PistonEnemy:draw()
     if not self.is_active then
-        print(self.cost, self.x - 1, self.y + 9, 5, false,1, false)
-        Collision.draw_box(Collision.get_interbox_by_object(self))
+        print(self.cost, self.x - 1, self.y + 10, Enemy.COST_COLOR, false,1, false)
+        -- Collision.draw_box(Collision.get_interbox_by_object(self))
     end
 
     spr(self.sprite[self.sprite.i].id, self.x, self.y, C0,1)
+    if self.money_time > 0 then
+        print("+1", self.x, self.y - 5, Enemy.MONEY_COLOR)
+    end
 end
 
 function PistonEnemy:update()
@@ -86,14 +103,16 @@ function PistonEnemy:update()
         self:activate_if_can()
     else
         Anime.tick(self.sprite)
+        self.money_time = Time.tick(self.money_time)
+        self.fear_time = Time.tick(self.fear_time)
     end
-
 end
 
 function PistonEnemy:activate_if_can()
     if self.cost == 0 and not self.is_active then
         self.is_active = true
         self.sprite = PistonEnemy.sprite.release
+        self.fear_time = Enemy.FEAR_TIME
     end
 end
 
@@ -123,6 +142,9 @@ function CircleEnemy:new(x, y)
         -- 'attack'
         -- 'release'
         is_bullet_shot = false,
+
+        money_time = 0,
+        fear_time = 0,
     }
     setmetatable(object, self)
     return object
@@ -156,11 +178,17 @@ function CircleEnemy:warning()
     self.status = 'warning'
 end
 
+function CircleEnemy:move(x, y)
+    self.x = x
+    self.y = y
+    self.chambered_bullet = Bullet:new(x-1, y-1)
+end
+
 
 function CircleEnemy:draw()
     if not self.is_active then
-        Collision.draw_box(Collision.get_interbox_by_object(self))
-        TextWithOutline.print(self.cost, self.x - self.interbox.r + 4, self.y - 1 + self.interbox.r, 2, 5,C0, 1, true)
+        -- Collision.draw_box(Collision.get_interbox_by_object(self))
+        TextWithOutline.print(self.cost, self.x - 5, self.y + 8, 2, Enemy.COST_COLOR,C0, 1, true)
 
         Collision.draw_box(Collision.get_hitbox_by_object(self), 5)
         self.chambered_bullet:draw(6)
@@ -175,6 +203,9 @@ function CircleEnemy:draw()
         self.chambered_bullet:draw()
     end
 
+    if self.money_time > 0 then
+        print("+1", self.x - 3, self.y - CircleEnemy.R - 7, Enemy.MONEY_COLOR)
+    end
 end
 
 function CircleEnemy:aimToPlayer()
@@ -219,11 +250,15 @@ function CircleEnemy:update()
         self.is_bullet_shot = true
     --     self.chambered_bullet = Bullet:new(self.x-1, self.y-1)
     end
+
+    self.money_time = Time.tick(self.money_time)
+    self.fear_time = Time.tick(self.fear_time)
 end
 
 function CircleEnemy:activate_if_can()
     if self.cost == 0 and not self.is_active then
         self.is_active = true
+        self.fear_time = Enemy.FEAR_TIME
     end
 end
 

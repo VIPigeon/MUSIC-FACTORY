@@ -4,9 +4,17 @@ BEATS_IN_TACT = 16 -- мы все умрем если это изменить
 SCREEN_WIDTH = 240
 SCREEN_HEIGHT = 136
 
+-- цвета
+GOLD = 14
+DARK_GOLD = 15
+--
+
+game.DEATH_TIME = 0.5
+
 Player.ROLL_TIME = 0.25
 
 Player.SPEED = 54
+Player.SPEED = 43.5
 Player.ROLL_SPEED = Player.SPEED * 2.3
 Player.ROLL_COOLDOWN = 0.21
 Player.ROLL_BUFFER = 0.0
@@ -44,6 +52,10 @@ Player.HITBOX = { -- обе границы включены
 }
 Player.HP = 6
 Player.I_TIME = 0.6
+
+Player.PAY_NOTE = Note:new(22+12, 0, 0, 0.34, 3)
+
+Player.HURT_REACTION = 0.4 -- степень мерцания при получении урона
 
 FULL_HEART_SPRITE = 260
 HALF_HEART_SPRITE = 261
@@ -97,11 +109,22 @@ PistonEnemy.INTERBOX = {x1=-4, y1=-3, x2=13, y2=17}
 CircleEnemy.R = 5
 CircleEnemy.PULLBACK_DISTANCE = 2
 CircleEnemy.HITBOX = {x=0, y=0, r=CircleEnemy.R, is_circle=true}
-CircleEnemy.INTERBOX = {x=0, y=0, r=CircleEnemy.R+6, is_circle=true}
+-- CircleEnemy.INTERBOX = {x=0, y=0, r=CircleEnemy.R+6, is_circle=true}
+CircleEnemy.INTERBOX = {x1=-(CircleEnemy.R+4), y1=-(CircleEnemy.R+4), x2=CircleEnemy.R+4, y2=CircleEnemy.R+4}
 -- CircleEnemy.PRERELEASE_TIME = 0.08 -- задержка появления
 
-Enemy.default_cost = 0
+Discoball.R = 8
+Discoball.COLOR = 4
+Discoball.INTERBOX = {x=0, y=0, r=Discoball.R+5, is_circle=true}
 
-Bullet.speed = 39
+Laser.ATTACK_TIME = 0.6
+
+Enemy.default_cost = 10
+Enemy.MONEY_TIME = 0.5
+Enemy.MONEY_COLOR = DARK_GOLD
+Enemy.COST_COLOR = 7
+Enemy.FEAR_TIME = 0.76
+
+Bullet.speed = 25
 
 Sheet.load()

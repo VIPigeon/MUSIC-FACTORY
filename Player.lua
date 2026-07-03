@@ -194,6 +194,11 @@ function Player:draw()
         hp = hp - 2
     end
 
+    if self.i_time > 0 then
+        if math.random() < Player.HURT_REACTION then
+            return
+        end
+    end
     spr(self.sprite[self.sprite.i].id, self.x, self.y, C0,1, self.flip)
 end
 
@@ -207,7 +212,7 @@ end
 
 function Player:pay(object)
     -- тикает в апдейте игрока
-    if object.cost == 0 then
+    if object.cost == 0 or game.money == 0 then
         return
     end
     if self.payment_t == 0 then
@@ -215,7 +220,9 @@ function Player:pay(object)
         self.payment_t = self.payment_T
         object.cost = object.cost - 1
         game.money = game.money - 1
+        Player.PAY_NOTE:play()
     end
+
 end
 
 Player.__index = Player

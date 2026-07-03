@@ -4,6 +4,7 @@ Director = {}
 function Director.init()
     -- будет работать по метроному
     -- но сейчас все максимально просто, потом я это все снесу
+    -- upd: уже не актуально. Я уже все снес
     Director.T = 60 / Settings.bpm
     Director.t = Director.T
 
@@ -19,7 +20,7 @@ function Director:update()
         -- нет, у нас есть event-система дома
         -- event-система дома:
         for part, e in pairs(game.enemies) do
-            if not e.is_active then
+            if not e.is_active or e.fear_time > 0 then
                 goto continue
             end
             local current_i = (Director.beat_counter - 1) % #Sheet[part].normal + 1
@@ -31,6 +32,7 @@ function Director:update()
             if current_note then
                 e:attack()
                 current_note:play()
+                e:earn_money()
             elseif prev_note then
                 e:release()
             end

@@ -1,5 +1,40 @@
 Collision = {}
 
+function Collision.lineIntersectsRect(x1, y1, x2, y2, rx1, ry1, rx2, ry2)
+    -- нормализуем прямоугольник
+    if rx1 > rx2 then rx1, rx2 = rx2, rx1 end
+    if ry1 > ry2 then ry1, ry2 = ry2, ry1 end
+
+    local dx = x2 - x1
+    local dy = y2 - y1
+
+    local t0 = 0
+    local t1 = 1
+
+    local function clip(p, q)
+        if p == 0 then
+            return q >= 0
+        end
+
+        local r = q / p
+
+        if p < 0 then
+            if r > t1 then return false end
+            if r > t0 then t0 = r end
+        else
+            if r < t0 then return false end
+            if r < t1 then t1 = r end
+        end
+
+        return true
+    end
+
+    return clip(-dx, x1 - rx1)
+       and clip( dx, rx2 - x1)
+       and clip(-dy, y1 - ry1)
+       and clip( dy, ry2 - y1)
+end
+
 function Collision._circle_and_rect(c, r)
     local nearestX = math.min(math.max(c.x, r.x1), r.x2)
     local nearestY = math.min(math.max(c.y, r.y1), r.y2)
