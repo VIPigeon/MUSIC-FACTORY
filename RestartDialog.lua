@@ -19,7 +19,7 @@ function RestartDialog:draw()
     local y = 7
     local outline_width = 4
     local color_text = 4
-    local color_outline = 1
+    local color_outline = 2
     local size = 2
     -- TextWithOutline.print("You looks like dead beef", x, y, outline_width, color_text, color_outline, size)
     TextWithOutline.print("RESTART?", x, y, outline_width, color_text, color_outline, size)

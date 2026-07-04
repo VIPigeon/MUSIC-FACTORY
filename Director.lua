@@ -14,7 +14,21 @@ end
 function Director:update()
     Director.t = Time.tick(Director.t)
     if Director.t == 0 then
-        Director.t = Director.T
+        Director.t = 60 / Settings.bpm
+
+        -- if Sheet.is_boss and Director.beat_counter >= 16*9 then
+        --     Sheet.load()
+        -- end
+
+        -- спавн бонусов
+        -- if #game.bonuses == 0 then
+        --     local x = math.random(5, 28) * 8
+        --     local y = math.random(4, 15) * 8
+        --     while 
+
+        --     table.insert(game.bonuses, Bonus:new())
+        -- end
+        --
 
         -- мама, я хочу свою event-систему
         -- нет, у нас есть event-система дома

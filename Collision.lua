@@ -1,5 +1,9 @@
 Collision = {}
 
+-- function Collision.is_collide_with_smth()
+--     for _, e in 
+-- end
+
 function Collision.lineIntersectsRect(x1, y1, x2, y2, rx1, ry1, rx2, ry2)
     -- нормализуем прямоугольник
     if rx1 > rx2 then rx1, rx2 = rx2, rx1 end

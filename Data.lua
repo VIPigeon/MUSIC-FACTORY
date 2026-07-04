@@ -1,3 +1,24 @@
+
+-- Bonus.T = Settings.bpm * 4 / 60.
+-- Bonus.TIME_TO_LIVE = 6.7
+
+Preview.TEXT = {
+    'Music was once produced in MUSIC FACTORIES', 'like this one.', '',
+    'Then synthesizers became popular,', 'and MUSIC FACTORIES were no longer needed', ':-(','',
+    'You bought a MUSIC FACTORY.','',
+    'Bring the MUSIC FACTORY back to life', 'and produce music again!',
+    '','','','',
+    '                <press Z to continue>',
+}
+WinScreen.TEXT = {
+    'You restored the MUSIC FACTORY!', '',
+    'Beautiful music fills the air  :-D', '',
+    'Your neighbors are happy!', '', 'They thank you for bringing','the MUSIC FACTORY back.',
+    '','','','',
+    '','',
+    '                <press Z to restart>',
+}
+
 KEY_W = 23
 KEY_A = 01
 KEY_S = 19
@@ -14,6 +35,7 @@ DARK_GOLD = 15
 --
 
 game.DEATH_TIME = 0.5
+game.SURVIVE_TIME = 30--42
 
 Player.ROLL_TIME = 0.25
 
@@ -117,11 +139,11 @@ CircleEnemy.HITBOX = {x=0, y=0, r=CircleEnemy.R, is_circle=true}
 CircleEnemy.INTERBOX = {x1=-(CircleEnemy.R+4), y1=-(CircleEnemy.R+4), x2=CircleEnemy.R+4, y2=CircleEnemy.R+4}
 -- CircleEnemy.PRERELEASE_TIME = 0.08 -- задержка появления
 
-Discoball.R = 8
-Discoball.COLOR = 4
-Discoball.INTERBOX = {x=0, y=0, r=Discoball.R+5, is_circle=true}
+-- Discoball.R = 8
+-- Discoball.COLOR = 4
+-- Discoball.INTERBOX = {x=0, y=0, r=Discoball.R+5, is_circle=true}
 
-Laser.ATTACK_TIME = 0.6
+-- Laser.ATTACK_TIME = 0.6
 
 Enemy.default_cost = 10
 Enemy.MONEY_TIME = 0.5
@@ -129,6 +151,6 @@ Enemy.MONEY_COLOR = DARK_GOLD
 Enemy.COST_COLOR = 7
 Enemy.FEAR_TIME = 0.76
 
-Bullet.speed = 25
+Bullet.speed = 24
 
 Sheet.load()

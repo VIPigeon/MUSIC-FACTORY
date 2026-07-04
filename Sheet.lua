@@ -1,6 +1,6 @@
 -- вспомогательный класс для нот
 Note = {
-    pivot = 36, -- 🍺
+    pivot = 36, -- 🍺 см. load
 }
 function Note:new(pitch, sound, channel, volume, speed)
     if pitch == nil then
@@ -65,7 +65,8 @@ function Sheet.concat(tacts)
     return res
 end
 
-function Sheet.load() -- вызывается в Data
+function Sheet.load() -- вызывается в Data   
+    Sheet.is_boss = false 
     Sheet.drum1 = {}
     Sheet.drum1.normal = Sheet.concat({
         Sheet.make_tact(Note:new(7, 12,0), 1),
@@ -130,7 +131,11 @@ function Sheet.load() -- вызывается в Data
         Sheet.make_tact(Note:new(10, 8,1), 1),
         Sheet.make_tact(Note:new(10, 8,1), 1),
 
-        -- Sheet.make_tact(Note:new(9, 8,1), 1),
+        Sheet.make_tact(Note:new(9, 8,1), 1),
+        Sheet.make_tact(Note:new(9, 8,1), 1),
+        Sheet.make_tact(Note:new(9, 8,1), 1),
+        Sheet.make_tact(Note:new(9, 8,1), 1),
+
     })
 
     Sheet.bell2 = {}
@@ -145,7 +150,11 @@ function Sheet.load() -- вызывается в Data
         Sheet.make_tact(Note:new(19, 8,2), 5),
         Sheet.make_tact(Note:new(19, 8,2), 5),
 
-        -- Sheet.make_tact(Note:new(17, 8,1), 5),
+        Sheet.make_tact(Note:new(17, 8,2), 5),
+        Sheet.make_tact(Note:new(17, 8,2), 5),
+        Sheet.make_tact(Note:new(17, 8,2), 5),
+        Sheet.make_tact(Note:new(17, 8,2), 5),
+
     })
 
     Sheet.bell3 = {}
@@ -160,7 +169,11 @@ function Sheet.load() -- вызывается в Data
         Sheet.make_tact(Note:new(14, 8,1), 9),
         Sheet.make_tact(Note:new(14, 8,1), 9),
 
-        -- Sheet.make_tact(Note:new(10, 8,1), 9),
+        Sheet.make_tact(Note:new(12, 8,1), 9),
+        Sheet.make_tact(Note:new(12, 8,1), 9),
+        Sheet.make_tact(Note:new(12, 8,1), 9),
+        Sheet.make_tact(Note:new(12, 8,1), 9),
+
     })
 
     Sheet.bell4 = {}
@@ -175,21 +188,92 @@ function Sheet.load() -- вызывается в Data
         Sheet.make_tact(Note:new(19, 8,2), 13),
         Sheet.make_tact(Note:new(19, 8,2), 13),
 
-        -- Sheet.make_tact(Note:new(17, 8,1), 13),
-    })
+        Sheet.make_tact(Note:new(17, 8,2), 13),
+        Sheet.make_tact(Note:new(17, 8,2), 13),
+        Sheet.make_tact(Note:new(17, 8,2), 13),
+        Sheet.make_tact(Note:new(17, 8,2), 13),
 
-    Sheet.disco = {}
-    Sheet.disco.normal = Sheet.concat({
-        Sheet.make_tact(Note:new(22, 8,3), 13),
-        Sheet.make_tact(Note:new(22, 8,3), 13),
-        Sheet.make_tact(Note:new(22, 8,3), 13),
-        Sheet.make_tact(Note:new(22, 8,3), 13),
-
-        Sheet.make_tact(Note:new(19, 8,3), 13),
-        Sheet.make_tact(Note:new(19, 8,3), 13),
-        Sheet.make_tact(Note:new(19, 8,3), 13),
-        Sheet.make_tact(Note:new(19, 8,3), 13),
-
-        -- Sheet.make_tact(Note:new(17, 8,1), 13),
     })
 end
+
+function Sheet.load_boss()
+    -- Note.pivot = 36+12 -- 🍺
+    local H = 0
+    local X = 3
+    Sheet.is_boss = true
+
+
+    Sheet.drum1 = {}
+    Sheet.drum1.normal = Sheet.concat({
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(false, 1),
+
+        -- Sheet.make_tact(Note:new(7, 12,0), 1),
+    })
+
+    Sheet.drum2 = {}
+    Sheet.drum2.normal = Sheet.concat({
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(false, 1),
+
+        -- Sheet.make_tact(Note:new(14, 12,0), 3),
+    })
+
+    Sheet.drum3 = {}
+    Sheet.drum3.normal = Sheet.concat({
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(false, 1),
+
+        -- Sheet.make_tact(Note:new(19, 12,0), 9),
+    })
+
+    Sheet.drum4 = {}
+    Sheet.drum4.normal = Sheet.concat({
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(false, 1),
+
+        -- Sheet.make_tact(Note:new(22, 12,0), 11),
+    })
+
+    Sheet.bell1 = {}
+    Sheet.bell1.normal = Sheet.concat({
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(2+H, 8,1), 1),
+        Sheet.make_tact(Note:new(2+H, 8,1), 1),
+        Sheet.make_tact(Note:new(0+H, 8,1), 1),
+        Sheet.make_tact(Note:new(0+H, 8,1), 1),
+        Sheet.make_tact(false, 1),
+    })
+
+    Sheet.bell2 = {}
+    Sheet.bell2.normal = Sheet.concat({
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(5+H, 8,2), 2),
+        Sheet.make_tact(Note:new(5+H, 8,2), 2),
+        Sheet.make_tact(Note:new(5+H, 8,2), 2),
+        Sheet.make_tact(Note:new(5+H, 8,2), 2),
+        Sheet.make_tact(false, 1),
+    })
+
+    Sheet.bell3 = {}
+    Sheet.bell3.normal = Sheet.concat({
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(10+H, 8,1), 3),
+        Sheet.make_tact(Note:new(10+H, 8,1), 3),
+        Sheet.make_tact(Note:new(12+H, 8,1), 3),
+        Sheet.make_tact(Note:new(12+H, 8,1), 3),
+        Sheet.make_tact(false, 1),
+
+    })
+
+    Sheet.bell4 = {}
+    Sheet.bell4.normal = Sheet.concat({
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(14+H, 8,2), 4),
+        Sheet.make_tact(Note:new(14+H, 8,2), 4),
+        Sheet.make_tact(Note:new(17+H, 8,2), 4),
+        Sheet.make_tact(Note:new(17+H, 8,2), 4),
+        Sheet.make_tact(false, 1),
+    })
+end
+
