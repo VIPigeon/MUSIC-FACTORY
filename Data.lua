@@ -12,7 +12,7 @@ set_normal_constants()
 function set_speed_up_constants()
     Player.SPEED = 54
     Settings.bpm = 1500
-    Bullet.speed = 38
+    Bullet.speed = 35
 end
 
 Preview.SPEND = 'Spend money to restore the MUSIC FACTORY'
