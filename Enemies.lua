@@ -40,7 +40,7 @@ function PistonEnemy:new(x, y)
 
         money_time = 0,
         fear_time = 0, -- время страха призыва
-        earn = 2,
+        earn = 3,
     }
     setmetatable(object, self)
     return object
@@ -61,7 +61,7 @@ function PistonEnemy:attack()
 
     self.sprite = table.copy(PistonEnemy.sprite.attack)
 
-    local COUNT_BULLETS = PistonEnemy.COUNT_BULLETS + game.player.hp
+    local COUNT_BULLETS = PistonEnemy.COUNT_BULLETS
     local SECTOR = 2*math.pi / COUNT_BULLETS
     for i = 1, COUNT_BULLETS do
         local bullet = Bullet:new(self.x+3, self.y+5)

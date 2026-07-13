@@ -11,12 +11,14 @@ end
 
 
 function game.init()
+    -- pmem(1, 1)
     game.status='preview'
     game.preview = Preview:new()
     game.restart()
 end
 
 function game.restart()
+    math.randomseed(time()*1e7)
     game.prev_money = 0
     game.time = 0
 
@@ -27,8 +29,6 @@ function game.restart()
     game.bpm_d = 1
     game.bpm_T = 0.1
 
-
-    Settings.bpm = 840
     game.is_final = false
     game.survive_time_left = game.SURVIVE_TIME
     -- game.is_win = false
@@ -54,7 +54,7 @@ function game.restart()
     }  -- список всех противников по ролям
     game.bullets = {}
     game.chests = {
-        small = nil,
+        -- small = nil,
         big = nil,
     }
     -- game.bonuses = {}
@@ -112,8 +112,8 @@ function game.restart()
     shuffle(t)
     local cost = {
         -- 0, 0, 0, 0, 0, 0, 0, 0,
-        -- 0, 5, 10, 25, 25, 50, 50, 100
-        0, 5, 10, 30, 30, 50, 50, 100
+        -- 0, 5, 10, 25, 25, 50, 50, 100,
+        0, 10, 25, 25, 25, 50, 50, 100,
     }
 
     -- local delta_cost = 5
@@ -149,7 +149,7 @@ function game.update()
         game.time = game.time + Time.dt()
         if not game.is_final and game.is_all_active() then
             game.is_final = true
-            Settings.bpm = 750
+            -- Settings.bpm = 750
         end
         -- if game.survive_time_left < 12 and not game.flag then
         --     Director.beat_counter = 0
@@ -223,6 +223,7 @@ function game.update()
             if game.survive_time_left == 0 then
                 -- game.is_win = true
                 game.status = 'win'
+                pmem(1, 1) -- запоминаем, что игрок победил
                 game.win_screen = WinScreen:new()
                 game.screen_animator = ChangeScreenAnimator:new()                
                 -- game.restart()
@@ -270,6 +271,11 @@ function game.update()
         end
     elseif game.status == 'preview' then
         if key.ok() then
+            set_normal_constants()
+            game.restart()
+            game.status = 'action'
+        elseif key.speed_up_mode() and pmem(1)==1 then
+            set_speed_up_constants()
             game.restart()
             game.status = 'action'
         end

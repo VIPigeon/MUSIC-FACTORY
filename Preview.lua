@@ -37,6 +37,11 @@ function Preview:draw()
         print(line, x, y, c)
         y = y + dy
     end
+    if pmem(1)==1 then
+        local text = '            <press X to play speed up>'
+        print(text, x, y+1, 1)
+        print(text, x, y, 2)
+    end
     -- TextWithOutline.print("You looks like dead beef", x, y, outline_width, color_text, color_outline, size)
     -- TextWithOutline.print("RESTART?", x, y, outline_width, color_text, color_outline, size, true)
     -- local button_color = 3

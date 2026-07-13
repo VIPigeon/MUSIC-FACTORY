@@ -60,11 +60,15 @@ function Player:move_as_possible(dx, dy)
     local hb1 = Collision.get_hitbox_by_object(self)
     hb1 = Collision.get_hitbox_by_object(self)
     for _, e in pairs(game.chests) do
+        if e.is_dead then
+            goto continue
+        end
         local hb2 = Collision.get_hitbox_by_object(e)
         if Collision.check(hb1, hb2) then
             self.x = self.x - dx
             break
         end
+        ::continue::
     end
 
     -- Вертикаль
@@ -76,11 +80,15 @@ function Player:move_as_possible(dx, dy)
     end
     hb1 = Collision.get_hitbox_by_object(self)
     for _, e in pairs(game.chests) do
+        if e.is_dead then
+            goto continue
+        end
         local hb2 = Collision.get_hitbox_by_object(e)
         if Collision.check(hb1, hb2) then
             self.y = self.y - dy
             break
         end
+        ::continue::
     end
 
 

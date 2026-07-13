@@ -10,6 +10,10 @@ end
 
 function WinScreen:update()
     if key.ok() then
+        set_normal_constants()
+        self.is_accepted = true
+    elseif key.speed_up_mode() then
+        set_speed_up_constants()
         self.is_accepted = true
     end
 end
@@ -30,6 +34,9 @@ function WinScreen:draw()
         if line == WinScreen.MY_TG then
             c = 3
             sc = 7
+        elseif line == WinScreen.SPEED_UP then
+            c = 2
+            sc = 1
         end
         print(line, x, y+1, sc)
         print(line, x, y, c)

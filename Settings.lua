@@ -1,4 +1,4 @@
 Settings = {
-    volume = 15,
+    volume = 10,
     bpm = 800,
 }

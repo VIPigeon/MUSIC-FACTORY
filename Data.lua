@@ -2,6 +2,19 @@
 -- Bonus.T = Settings.bpm * 4 / 60.
 -- Bonus.TIME_TO_LIVE = 6.7
 
+function set_normal_constants()
+    Player.SPEED = 43.5
+    Settings.bpm = 840
+    Bullet.speed = 24
+end
+set_normal_constants()
+
+function set_speed_up_constants()
+    Player.SPEED = 54
+    Settings.bpm = 1500
+    Bullet.speed = 38
+end
+
 Preview.SPEND = 'Spend money to restore the MUSIC FACTORY'
 Preview.EARN = 'Earn money from the MUSIC FACTORY'
 Preview.TEXT = {
@@ -18,14 +31,17 @@ Preview.TEXT = {
     '','','','',
     '                <press Z to continue>',
 }
+
+WinScreen.SPEED_UP = '            <press X to play SPEED UP>'
 WinScreen.YOUR_TIME = 'Your time:'
 WinScreen.MY_TG = '                           @vcrocstudio'
 WinScreen.TEXT = {
     'You restored the MUSIC FACTORY!', '',
     -- 'Beautiful music fills the air  :-D', '',
     'Your neighbors are happy!', '', 'They thank you for bringing','the MUSIC FACTORY back.',
-    '',WinScreen.YOUR_TIME,'','',
+    '',WinScreen.YOUR_TIME,'',
     '                <press Z to restart>',
+    WinScreen.SPEED_UP,
     '',
     '',
     '                           Follow my tg :-)',
@@ -52,8 +68,6 @@ game.SURVIVE_TIME = 30--42
 
 Player.ROLL_TIME = 0.25
 
-Player.SPEED = 54
-Player.SPEED = 43.5
 Player.ROLL_SPEED = Player.SPEED * 2.3
 Player.ROLL_COOLDOWN = 0.21
 Player.ROLL_BUFFER = 0.0
@@ -162,7 +176,7 @@ PistonEnemy.sprite = {
 }
 PistonEnemy.HITBOX = {x1=1, y1=1, x2=6, y2=7}
 PistonEnemy.INTERBOX = {x1=-4, y1=-3, x2=13, y2=17} 
-PistonEnemy.COUNT_BULLETS = 3 -- прибавляется хп игрока
+PistonEnemy.COUNT_BULLETS = 6
 -- hitbox for INTERaction 🤪
 
 
@@ -185,8 +199,6 @@ Enemy.MONEY_COLOR = DARK_GOLD
 Enemy.COST_COLOR = 7
 Enemy.FEAR_TIME = 0.76
 
-Bullet.speed = 24
-
 Chest.sprite = {
     static = {
         i = 1,
@@ -197,18 +209,18 @@ Chest.sprite = {
         {id=482, T=-1},
     },
 }
-Chest.HP = {small=10, big=25}
+Chest.HP = {small=10, big=30}
 Chest.HITBOX = {
     x1 = 0,
     y1 = 2,
     x2 = 15,
     y2 = 15,
 }
-Chest.DIE_T = 0.21
+Chest.DIE_T = 0.11
 -- начальная частота выдачи награды
-Chest.REWARD_FREQ = 0.11
+Chest.REWARD_FREQ = 0.12
 -- коэффициент ускорения
-Chest.REWARD_ACC = 0.8
+Chest.REWARD_ACC = 0.75
 
 Sheet.load()
 

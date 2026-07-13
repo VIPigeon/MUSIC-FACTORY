@@ -27,3 +27,7 @@ end
 function key.ok()
     return btnp(4)
 end
+
+function key.speed_up_mode()
+    return btnp(5)
+end
