@@ -10,8 +10,8 @@ end
 set_normal_constants()
 
 function set_speed_up_constants()
-    Player.SPEED = 54
-    Settings.bpm = 1500
+    Player.SPEED = 65
+    Settings.bpm = 1250
     Bullet.speed = 35
 end
 
