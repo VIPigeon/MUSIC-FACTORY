@@ -6,8 +6,8 @@ function Chest:new(x, y, hp)
         x = x,
         y = y,
         -- награда равна изначальному количеству hp
-        reward = hp,
-        init_reward = hp,
+        reward = Chest.REWARD,
+        init_reward = Chest.REWARD,
         sprite = Chest.sprite.static,
         die_t = Chest.DIE_T,
         is_dieing = false,

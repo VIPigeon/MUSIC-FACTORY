@@ -209,7 +209,7 @@ Chest.sprite = {
         {id=482, T=-1},
     },
 }
-Chest.HP = {small=10, big=30}
+Chest.HP = {small=25, big=25}
 Chest.HITBOX = {
     x1 = 0,
     y1 = 2,
@@ -221,6 +221,7 @@ Chest.DIE_T = 0.11
 Chest.REWARD_FREQ = 0.12
 -- коэффициент ускорения
 Chest.REWARD_ACC = 0.75
+Chest.REWARD = 25
 
 Sheet.load()
 
