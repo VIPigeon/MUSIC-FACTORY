@@ -27,8 +27,14 @@ function Preview:draw()
     local shadow_color = 6
 
     for _, line in ipairs(Preview.TEXT) do
-        print(line, x, y+1, shadow_color)
-        print(line, x, y, color)
+        local c = color
+        local sc = shadow_color
+        if line == Preview.SPEND or line == Preview.EARN then
+            c = GOLD
+            sc = DARK_GOLD
+        end
+        print(line, x, y+1, sc)
+        print(line, x, y, c)
         y = y + dy
     end
     -- TextWithOutline.print("You looks like dead beef", x, y, outline_width, color_text, color_outline, size)

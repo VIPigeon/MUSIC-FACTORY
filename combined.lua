@@ -531,8 +531,14 @@ function Preview:draw()
     local shadow_color = 6
 
     for _, line in ipairs(Preview.TEXT) do
-        print(line, x, y+1, shadow_color)
-        print(line, x, y, color)
+        local c = color
+        local sc = shadow_color
+        if line == Preview.SPEND or line == Preview.EARN then
+            c = GOLD
+            sc = DARK_GOLD
+        end
+        print(line, x, y+1, sc)
+        print(line, x, y, c)
         y = y + dy
     end
     -- TextWithOutline.print("You looks like dead beef", x, y, outline_width, color_text, color_outline, size)
@@ -574,8 +580,21 @@ function WinScreen:draw()
     local shadow_color = 6
 
     for _, line in ipairs(WinScreen.TEXT) do
-        print(line, x, y+1, shadow_color)
-        print(line, x, y, color)
+        local c = color
+        local sc = shadow_color
+        if line == WinScreen.MY_TG then
+            c = 3
+            sc = 7
+        end
+        print(line, x, y+1, sc)
+        print(line, x, y, c)
+        if line == WinScreen.YOUR_TIME then
+            local text = math.floor(game.time/60)..' : '..math.floor(game.time%60)..'.'..math.floor(game.time%60*100%100)
+            c = GOLD
+            sc = DARK_GOLD
+            print(text, x+#WinScreen.YOUR_TIME*6, y+1, sc)
+            print(text, x+#WinScreen.YOUR_TIME*6, y, c)
+        end
         y = y + dy
     end
     -- TextWithOutline.print("Z", x, y+1, outline_width, shadow_color, shadow_color, size, true)
@@ -585,6 +604,172 @@ end
 
 WinScreen.__index = WinScreen
 -- END WinScreen.lua
+-- BEGIN Coin.lua
+
+Coin = {}
+function Coin:new(x, y, is_static)
+    local object = {
+        x = x,
+        y = y,
+    }
+    if is_static then
+        object.animation = Coin.sprite.static
+    else
+        object.animation = table.copy(Coin.sprite.flip)
+    end
+    setmetatable(object, self)
+    return object
+end
+
+function Coin:update()
+    Anime.tick(self.animation)
+end
+
+function Coin:draw()
+    local i = self.animation[self.animation.i].id
+    local x = self.x
+    local y = self.y
+    -- trace(i..' '..x..' '..y)
+    spr(i, x, y, C0)
+end
+
+Coin.__index = Coin
+-- END Coin.lua
+-- BEGIN qr.lua
+qr = {}
+
+qr.code = {
+    "1111111011100111101111111",
+    "1000001001001010101000001",
+    "1011101001001010001011101",
+    "1011101010111110101011101",
+    "1011101011100101101011101",
+    "1000001011001010001000001",
+    "1111111010101010101111111",
+    "0000000011000010100000000",
+    "1000101110100000111111001",
+    "1101010001111101100111010",
+    "0110101011110011001001100",
+    "1100010100101000111100110",
+    "1011101000000000011001111",
+    "1100110011101101100010010",
+    "0011001000011011101111100",
+    "0001110101010010000110110",
+    "1111001001101000111111100",
+    "0000000011000111100010000",
+    "1111111011100010101010000",
+    "1000001000001000100011110",
+    "1011101011111000111111100",
+    "1011101000101011111100111",
+    "1011101000111000011001010",
+    "1000001000001011000111110",
+    "1111111011011000011000111",
+}
+function qr.draw()
+    local scale = 1      -- размер одного модуля QR в пикселях
+    local ox = 200        -- смещение по X
+    local oy = 100        -- смещение по Y
+
+    local BLACK = 0
+    local WHITE = 4
+
+    for y = 1, #qr.code do
+        local row = qr.code[y]
+        for x = 1, #row do
+            local color = WHITE
+            if row:sub(x, x) == "1" then
+                color = BLACK
+            end
+
+            for dy = 0, scale - 1 do
+                for dx = 0, scale - 1 do
+                    pix(
+                        ox + (x - 1) * scale + dx,
+                        oy + (y - 1) * scale + dy,
+                        color
+                    )
+                end
+            end
+        end
+    end
+end
+-- END qr.lua
+-- BEGIN Chest.lua
+Chest = {}
+
+function Chest:new(x, y, hp)
+    local object = {
+        hp = hp,
+        x = x,
+        y = y,
+        -- награда равна изначальному количеству hp
+        reward = hp,
+        init_reward = hp,
+        sprite = Chest.sprite.static,
+        die_t = Chest.DIE_T,
+        is_dieing = false,
+        hitbox = Chest.HITBOX,
+        reward_t = 0,
+        reward_T = Chest.REWARD_FREQ,
+    }
+    setmetatable(object, self)
+    return object
+end
+
+function Chest:get_damage(damage)
+    -- всегда один урон
+    damage = damage or 1
+    self.hp = math.max(0, self.hp - damage)
+end
+
+function Chest:draw()
+    if self.is_dead then
+        print('+'..self.init_reward, self.x, self.y+6, GOLD)
+        return
+    end
+    spr(self.sprite[self.sprite.i].id, self.x, self.y, C0,1, 0,0, 2,2)
+    local c = 4
+    local sc = 7
+    print(self.hp, self.x + 3, self.y + 10, sc)
+    print(self.hp, self.x + 3, self.y + 9, c)
+end
+
+function Chest:earn_money()
+    game.money = game.money + 1
+    self.reward = self.reward - 1
+end
+
+function Chest:update()
+    if self.is_dead and self.reward > 0 then
+        if self.reward_t == 0 then
+            self.reward_T = self.reward_T * Chest.REWARD_ACC
+            self.reward_t = self.reward_T
+            self:earn_money()
+        end
+        self.reward_t = Time.tick(self.reward_t)
+        return
+    end
+
+    Anime.tick(self.sprite)
+    local prev_status = self.is_dieing
+    self.is_dieing = (self.hp == 0)
+    if not prev_status and self.is_dieing then
+        self.sprite = table.copy(Chest.sprite.dieing)
+    end
+    if self.is_dieing then
+        if self.die_t == 0 then
+            -- короче говоря
+            -- сундук умер
+            self.is_dead = true
+            self.reward_t = self.reward_T
+        end
+
+        self.die_t = Time.tick(self.die_t)
+    end
+end
+
+Chest.__index = Chest
+-- END Chest.lua
 
 -- Невероятно душные модули. Я их ненавижу
 -- BEGIN Sheet.lua
@@ -660,53 +845,76 @@ function Sheet.load() -- вызывается в Data
     Sheet.drum1 = {}
     Sheet.drum1.normal = Sheet.concat({
         Sheet.make_tact(Note:new(7, 12,0), 1),
+        Sheet.make_tact(false, 1),
         Sheet.make_tact(Note:new(7, 12,0), 1),
-        Sheet.make_tact(Note:new(7, 12,0), 1),
-        Sheet.make_tact(Note:new(7, 12,0), 1),
+        Sheet.make_tact(false, 1),
 
         Sheet.make_tact(Note:new(3, 12,0), 1),
+        Sheet.make_tact(false, 1),
         Sheet.make_tact(Note:new(3, 12,0), 1),
-        Sheet.make_tact(Note:new(3, 12,0), 1),
-        Sheet.make_tact(Note:new(3, 12,0), 1),
+        Sheet.make_tact(false, 1),
+
+        -- Sheet.make_tact(Note:new(7, 12,0), 1),
+        -- Sheet.make_tact(Note:new(7, 12,0), 1),
+
+        -- Sheet.make_tact(Note:new(3, 12,0), 1),
+        -- Sheet.make_tact(Note:new(3, 12,0), 1),
+        -- Sheet.make_tact(Note:new(3, 12,0), 1),
+        -- Sheet.make_tact(Note:new(3, 12,0), 1),
     })
 
     Sheet.drum2 = {}
     Sheet.drum2.normal = Sheet.concat({
-        Sheet.make_tact(Note:new(14, 12,0), 3),
-        Sheet.make_tact(Note:new(14, 12,0), 3),
-        Sheet.make_tact(Note:new(14, 12,0), 3),
-        Sheet.make_tact(Note:new(14, 12,0), 3),
+        Sheet.make_tact(Note:new(14, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(14, 12,0), 9),
+        Sheet.make_tact(false, 1),
 
-        Sheet.make_tact(Note:new(10, 12,0), 3),
-        Sheet.make_tact(Note:new(10, 12,0), 3),
-        Sheet.make_tact(Note:new(10, 12,0), 3),
-        Sheet.make_tact(Note:new(10, 12,0), 3),
+        Sheet.make_tact(Note:new(14, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(14, 12,0), 9),
+        Sheet.make_tact(false, 1),
+
+        -- Sheet.make_tact(Note:new(10, 12,0), 3),
+        -- Sheet.make_tact(Note:new(10, 12,0), 3),
+        -- Sheet.make_tact(Note:new(10, 12,0), 3),
+        -- Sheet.make_tact(Note:new(10, 12,0), 3),
     })
 
     Sheet.drum3 = {}
     Sheet.drum3.normal = Sheet.concat({
-        Sheet.make_tact(Note:new(19, 12,0), 9),
-        Sheet.make_tact(Note:new(19, 12,0), 9),
-        Sheet.make_tact(Note:new(19, 12,0), 9),
-        Sheet.make_tact(Note:new(19, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(19, 12,0), 1),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(19, 12,0), 1),
 
-        Sheet.make_tact(Note:new(15, 12,0), 9),
-        Sheet.make_tact(Note:new(15, 12,0), 9),
-        Sheet.make_tact(Note:new(15, 12,0), 9),
-        Sheet.make_tact(Note:new(15, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(15, 12,0), 1),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(15, 12,0), 1),
+
+        -- Sheet.make_tact(Note:new(15, 12,0), 9),
+        -- Sheet.make_tact(Note:new(15, 12,0), 9),
+        -- Sheet.make_tact(Note:new(15, 12,0), 9),
+        -- Sheet.make_tact(Note:new(15, 12,0), 9),
     })
 
     Sheet.drum4 = {}
     Sheet.drum4.normal = Sheet.concat({
-        Sheet.make_tact(Note:new(22, 12,0), 11),
-        Sheet.make_tact(Note:new(22, 12,0), 11),
-        Sheet.make_tact(Note:new(22, 12,0), 11),
-        Sheet.make_tact(Note:new(22, 12,0), 11),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(22, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(22, 12,0), 9),
 
-        Sheet.make_tact(Note:new(19, 12,0), 11),
-        Sheet.make_tact(Note:new(19, 12,0), 11),
-        Sheet.make_tact(Note:new(19, 12,0), 11),
-        Sheet.make_tact(Note:new(19, 12,0), 11),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(19, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(19, 12,0), 9),
+
+        -- Sheet.make_tact(Note:new(19, 12,0), 11),
+        -- Sheet.make_tact(Note:new(19, 12,0), 11),
+        -- Sheet.make_tact(Note:new(19, 12,0), 11),
+        -- Sheet.make_tact(Note:new(19, 12,0), 11),
     })
 
     Sheet.bell1 = {}
@@ -903,6 +1111,7 @@ function Generation.get_places(k, w, h)
     local static_objects = {
         {x = 0,  y = 0, w = 4, h = 3},
         {x = 14, y = 7, w = 3, h = 3},
+        {x = 0,  y = 26, w = 4, h = 3},
     }
 
     local result = {}
@@ -1039,8 +1248,6 @@ function Player:new(x, y)
 end
 
 function Player:move_as_possible(dx, dy)
-    self.x = self.x + dx
-    self.y = self.y + dy
 
     -- смещения под картинку игрока
     -- если изменить внешность игрока, то я умираю
@@ -1050,24 +1257,43 @@ function Player:move_as_possible(dx, dy)
     local y2 = self.hitbox.y2 + 3
 
     -- Горизонталь
+    self.x = self.x + dx
     if self.x + x1 < 0 then
         self.x = -x1
     elseif self.x + x2 > SCREEN_WIDTH then
         self.x = SCREEN_WIDTH - x2
     end
+    local hb1 = Collision.get_hitbox_by_object(self)
+    hb1 = Collision.get_hitbox_by_object(self)
+    for _, e in pairs(game.chests) do
+        local hb2 = Collision.get_hitbox_by_object(e)
+        if Collision.check(hb1, hb2) then
+            self.x = self.x - dx
+            break
+        end
+    end
 
     -- Вертикаль
+    self.y = self.y + dy
     if self.y + y1 < 0 then
         self.y = -y1
     elseif self.y + y2 > SCREEN_HEIGHT then
         self.y = SCREEN_HEIGHT - y2
     end
+    hb1 = Collision.get_hitbox_by_object(self)
+    for _, e in pairs(game.chests) do
+        local hb2 = Collision.get_hitbox_by_object(e)
+        if Collision.check(hb1, hb2) then
+            self.y = self.y - dy
+            break
+        end
+    end
+
+
+
+
     -- local hb1 = Collision.get_hitbox_by_object(self)
     -- hb1 = Collision.get_hitbox_by_object(self)
-
-
-
-
     -- for _, e in pairs(game.enemies) do
     --     local hb2 = Collision.get_hitbox_by_object(e)
     --     if Collision.check(hb1, hb2) then
@@ -1224,334 +1450,8 @@ end
 
 Player.__index = Player
 -- END Player.lua
-
--- здесь смешным комментов нет. мне было не до шуток
-
-Enemy = {}
-function Enemy:move(x, y)
-    self.x = x
-    self.y = y
-end
--- function Enemy:draw()
---     spr(self.sprite[self.sprite.i].id, self.x, self.y, C0,1)
--- end
--- function Enemy:update()
---     Anime.tick(self.sprite)
--- end
--- function Enemy:update()
--- end
--- function Enemy:draw()
--- end
--- function Enemy:attack()
--- end
-
-function Enemy:earn_money()
-    game.money = game.money + 1
-    self.money_time = Enemy.MONEY_TIME -- для анимации
-end
-
-
-PistonEnemy = table.copy(Enemy)
-function PistonEnemy:new(x, y)
-    local object = {
-        x = x,
-        y = y,
-        sprite = table.copy(PistonEnemy.sprite.inactive),
-        hitbox = PistonEnemy.HITBOX,
-        interbox = PistonEnemy.INTERBOX,
-
-        is_active = false,
-        cost = Enemy.default_cost,
-
-        money_time = 0,
-        fear_time = 0, -- время страха призыва
-    }
-    setmetatable(object, self)
-    return object
-end
-
-function PistonEnemy:prepare()
-    if not self.is_active then
-        return
-    end
-
-    self.sprite = table.copy(PistonEnemy.sprite.prepare)
-end
-
-function PistonEnemy:attack()
-    -- if not self.is_active then
-    --     return
-    -- end
-
-    self.sprite = table.copy(PistonEnemy.sprite.attack)
-
-    local COUNT_BULLETS = 5
-    local SECTOR = 2*math.pi / COUNT_BULLETS
-    for i = 1, COUNT_BULLETS do
-        local bullet = Bullet:new(self.x+3, self.y+5)
-        local angle = math.random() * SECTOR + (i-1)*SECTOR
-        bullet.dx = math.cos(angle)
-        bullet.dy = math.sin(angle)
-        table.insert(game.bullets, bullet)
-    end
-end
-
-function PistonEnemy:release()
-    -- if not self.is_active then
-    --     return
-    -- end
-
-    self.sprite = table.copy(PistonEnemy.sprite.release)
-end
-
-function PistonEnemy:warning()
-    -- if not self.is_active then
-    --     return
-    -- end
-
-    self.sprite = table.copy(PistonEnemy.sprite.warning)
-end
-
-function PistonEnemy:draw()
-    if not self.is_active then
-        print(self.cost, self.x - 1, self.y + 10, Enemy.COST_COLOR, false,1, false)
-        -- Collision.draw_box(Collision.get_interbox_by_object(self))
-    end
-
-    spr(self.sprite[self.sprite.i].id, self.x, self.y, C0,1)
-    if self.money_time > 0 then
-        print("+1", self.x, self.y - 5, Enemy.MONEY_COLOR)
-    end
-end
-
-function PistonEnemy:update()
-    if not self.is_active then
-        self:activate_if_can()
-    else
-        Anime.tick(self.sprite)
-        self.money_time = Time.tick(self.money_time)
-        self.fear_time = Time.tick(self.fear_time)
-    end
-end
-
-function PistonEnemy:activate_if_can()
-    if self.cost == 0 and not self.is_active then
-        self.is_active = true
-        self.sprite = PistonEnemy.sprite.release
-        self.fear_time = Enemy.FEAR_TIME
-    end
-end
-
-PistonEnemy.__index = PistonEnemy
-
-
-CircleEnemy = table.copy(Enemy)
-function CircleEnemy:new(x, y)
-    local object = {
-        x = x,
-        y = y,
-        hitbox = CircleEnemy.HITBOX,
-        interbox = CircleEnemy.INTERBOX,
-
-        -- пуля не апдейтится и не отрисовывается,
-        -- так как не находится в списке пуль
-        chambered_bullet = Bullet:new(x-1, y-1),
-        -- -1 — костыль для пули 3×3
-
-        is_active = false,
-        cost = Enemy.default_cost,
-
-        -- вместо спрайта
-        status = 'release',
-        -- 'warning'
-        -- 'prepare'
-        -- 'attack'
-        -- 'release'
-        is_bullet_shot = false,
-
-        money_time = 0,
-        fear_time = 0,
-    }
-    setmetatable(object, self)
-    return object
-end
-
-function CircleEnemy:prepare()
-    -- if not self.is_active then
-    --     return
-    -- end
-    self.status = 'prepare'
-end
-
-function CircleEnemy:attack()
-    -- if not self.is_active then
-    --     return
-    -- end
-    self.status = 'attack'
-end
-
-function CircleEnemy:release()
-    -- if not self.is_active then
-    --     return
-    -- end
-    self.status = 'release'
-end
-
-function CircleEnemy:warning()
-    -- if not self.is_active then
-    --     return
-    -- end
-    self.status = 'warning'
-end
-
-function CircleEnemy:move(x, y)
-    self.x = x
-    self.y = y
-    self.chambered_bullet = Bullet:new(x-1, y-1)
-end
-
-
-function CircleEnemy:draw()
-    if not self.is_active then
-        -- Collision.draw_box(Collision.get_interbox_by_object(self))
-        TextWithOutline.print(self.cost, self.x - 5, self.y + 8, 2, Enemy.COST_COLOR,C0, 1, true)
-
-        Collision.draw_box(Collision.get_hitbox_by_object(self), 5)
-        self.chambered_bullet:draw(6)
-        return
-    end
-
-    Collision.draw_box(Collision.get_hitbox_by_object(self), 4)
-
-    if self.status == 'release' then
-        self.chambered_bullet:draw(1)
-    elseif self.status ~= 'attack' then
-        self.chambered_bullet:draw()
-    end
-
-    if self.money_time > 0 then
-        print("+1", self.x - 3, self.y - CircleEnemy.R - 7, Enemy.MONEY_COLOR)
-    end
-end
-
-function CircleEnemy:aimToPlayer()
-    local x = self.x
-    local y = self.y
-    local px, py = Collision.get_box_center(Collision.get_hitbox_by_object(game.player))
-
-    local dx = px - x
-    local dy = py - y
-
-    local length = math.sqrt(dx * dx + dy * dy)
-
-    if length == 0 then
-        return 0, 0
-    end
-
-    return dx / length, dy / length
-end
-
-function CircleEnemy:update()
-    if not self.is_active then
-        self:activate_if_can()
-    end
-
-    if self.status == 'prepare' then
-        local dx, dy = self:aimToPlayer()
-        self.chambered_bullet.x = self.x-1 - CircleEnemy.PULLBACK_DISTANCE * dx
-        self.chambered_bullet.y = self.y-1 - CircleEnemy.PULLBACK_DISTANCE * dy
-    elseif self.status == 'attack' and self.is_bullet_shot then
-        local dx, dy = self:aimToPlayer()
-
-        self.chambered_bullet.x = self.x-1-- + CircleEnemy.PULLBACK_DISTANCE * dx
-        self.chambered_bullet.y = self.y-1-- + CircleEnemy.PULLBACK_DISTANCE * dy
-
-
-        self.chambered_bullet.dx = dx
-        self.chambered_bullet.dy = dy
-        table.insert(game.bullets, self.chambered_bullet)
-        self.chambered_bullet = Bullet:new(self.x-1, self.y-1)
-        self.is_bullet_shot = false
-    elseif self.status == 'release' then
-        self.is_bullet_shot = true
-    --     self.chambered_bullet = Bullet:new(self.x-1, self.y-1)
-    end
-
-    self.money_time = Time.tick(self.money_time)
-    self.fear_time = Time.tick(self.fear_time)
-end
-
-function CircleEnemy:activate_if_can()
-    if self.cost == 0 and not self.is_active then
-        self.is_active = true
-        self.fear_time = Enemy.FEAR_TIME
-    end
-end
-
-CircleEnemy.__index = CircleEnemy
-
-
-
-Director = {}
-
-function Director.init()
-    -- будет работать по метроному
-    -- но сейчас все максимально просто, потом я это все снесу
-    -- upd: уже не актуально. Я уже все снес
-    Director.T = 60 / Settings.bpm
-    Director.t = Director.T
-
-    Director.beat_counter = 0
-end
-
-function Director:update()
-    Director.t = Time.tick(Director.t)
-    if Director.t == 0 then
-        Director.t = 60 / Settings.bpm
-
-        -- if Sheet.is_boss and Director.beat_counter >= 16*9 then
-        --     Sheet.load()
-        -- end
-
-        -- спавн бонусов
-        -- if #game.bonuses == 0 then
-        --     local x = math.random(5, 28) * 8
-        --     local y = math.random(4, 15) * 8
-        --     while 
-
-        --     table.insert(game.bonuses, Bonus:new())
-        -- end
-        --
-
-        -- мама, я хочу свою event-систему
-        -- нет, у нас есть event-система дома
-        -- event-система дома:
-        for part, e in pairs(game.enemies) do
-            if not e.is_active or e.fear_time > 0 then
-                goto continue
-            end
-            local current_i = (Director.beat_counter - 1) % #Sheet[part].normal + 1
-            local prev_i = (Director.beat_counter - 2) % #Sheet[part].normal + 1
-            local next_i = (Director.beat_counter) % #Sheet[part].normal + 1
-            local current_note = Sheet[part].normal[current_i]
-            local prev_note = Sheet[part].normal[prev_i]
-            local next_note = Sheet[part].normal[next_i]
-            if current_note then
-                e:attack()
-                current_note:play()
-                e:earn_money()
-            elseif prev_note then
-                e:release()
-            end
-            if next_note then
-                e:prepare()
-            end
-            ::continue::
-        end
-        Director.beat_counter = Director.beat_counter + 1
-    end
-end
-
+require("Enemies") -- все противники в одном файле ⚛️
+require("Director") -- Дирижер 
 -- BEGIN key.lua
 
 tic80_key = key
@@ -1639,6 +1539,9 @@ function game.init()
 end
 
 function game.restart()
+    game.prev_money = 0
+    game.time = 0
+
     game.flag = false
 
     Note.pivot = 36
@@ -1652,7 +1555,9 @@ function game.restart()
     game.survive_time_left = game.SURVIVE_TIME
     -- game.is_win = false
 
+    game.coins = {Coin:new(3, 12, false)} -- для анимаций, только и всего
     game.player = Player:new(14*8, 7*8)
+    -- game.player.hp = 1
     game.restart_dialog = false
     game.death_time = 0 -- задержка экрана во время смерти
 
@@ -1670,11 +1575,52 @@ function game.restart()
         bell4 = CircleEnemy:new(math.random(temp, SCREEN_WIDTH - temp), math.random(temp, SCREEN_HEIGHT - temp)),
     }  -- список всех противников по ролям
     game.bullets = {}
+    game.chests = {
+        small = nil,
+        big = nil,
+    }
     -- game.bonuses = {}
     game.money = 0
 
     local t = {
-        -- 'disco',
+        'drum1',
+        'drum2',
+        'drum3',
+        'drum4',
+        'big', -- большой сундук
+        'small', -- маленький сундук
+    }
+    shuffle(t)
+    table.concatTable(t,
+        {
+            'bell1',
+            'bell2',
+            'bell3',
+            'bell4',
+        }
+    )
+
+    -- расстановка
+    local places = Generation.get_places(10)
+    Generation.sort_by_center(places)
+    local i = 1
+    for _, place in ipairs(places) do
+        if t[i] == 'small' or t[i] == 'big' then
+            local chest = Chest:new(place.x*8 + 5, place.y*8 + 7, Chest.HP[t[i]])
+            game.chests[t[i]] = chest
+        else
+            local e = game.enemies[t[i]]
+            local x = place.x*8 + 10
+            local y = place.y*8 + 14
+            e:move(x, y)
+        end
+        i = i + 1
+    end
+    -- 
+
+    -- установка стоимостей
+
+    t = {
         'drum1',
         'drum2',
         'drum3',
@@ -1685,20 +1631,6 @@ function game.restart()
         'bell4',
     }
 
-    -- расстановка
-    local places = Generation.get_places(#t)
-    Generation.sort_by_center(places)
-    local i = 1
-    for _, place in ipairs(places) do
-        local e = game.enemies[t[i]]
-        local x = place.x*8 + 10
-        local y = place.y*8 + 14
-        e:move(x, y)
-        i = i + 1
-    end
-    --
-
-    -- установка стоимостей
     shuffle(t)
     local cost = {
         -- 0, 0, 0, 0, 0, 0, 0, 0,
@@ -1719,6 +1651,23 @@ end
 
 function game.update()
     if game.status == 'action' then
+
+        for _, coin in ipairs(game.coins) do
+            if game.is_player_pay then
+                coin:update()
+            else
+                coin.animation.i = 1
+            end
+        end
+
+        for _, c in pairs(game.chests) do
+            if c.is_dead and c.reward == 0 then
+                game.chests[_] = nil
+            end
+            c:update()
+        end
+
+        game.time = game.time + Time.dt()
         if not game.is_final and game.is_all_active() then
             game.is_final = true
             Settings.bpm = 750
@@ -1743,16 +1692,18 @@ function game.update()
         Director:update()
         local player_rect = Collision.get_hitbox_by_object(game.player)
 
-        local is_player_pay = false
+        game.is_player_pay = false
         for _, e in pairs(game.enemies) do
             e:update()
             local eb = Collision.get_interbox_by_object(e)
             if Collision.check(player_rect, eb) then
+                if game.money > 0 and not e.is_active then
+                    game.is_player_pay = true
+                end
                 game.player:pay(e)
-                is_player_pay = true
             end
         end
-        if not is_player_pay then
+        if not game.is_player_pay then
             game.player.payment_T = Player.PAYMENT_FREQ
         end
 
@@ -1763,6 +1714,17 @@ function game.update()
             local b_rect = Collision.get_hitbox_by_object(b)
             if Collision.check(player_rect, b_rect) then
                 game.player:hurt()
+            end
+            for _, c in pairs(game.chests) do
+                if c.is_dead then
+                    goto continue
+                end
+                local c_rect = Collision.get_hitbox_by_object(c)
+                if Collision.check(c_rect, b_rect) then
+                    c:get_damage()
+                    table.insert(should_be_deleted, i)
+                end
+                ::continue::
             end
             if b.x > SCREEN_WIDTH + _d or b.x < -_d or b.y > SCREEN_HEIGHT + _d or b.y < -_d then
                 table.insert(should_be_deleted, i)
@@ -1850,18 +1812,35 @@ function game.draw_all()
     for _, e in pairs(game.enemies) do
         e:draw()
     end
-    for _, b in ipairs(game.bullets) do
-        b:draw()
-    end
 
     if game.is_final then
         print('SURVIVE', 3, 11, GOLD)
         -- +0.12 для драматизма
         print("0:"..tostring(math.floor(game.survive_time_left+0.12)), 3, 11 + 10, DARK_GOLD)
     else
-        print(game.money, 3, 11, GOLD)
+        local c = GOLD
+        -- if game.prev_money < game.money then
+            -- c = GOLD-1 -- light gold
+        if game.prev_money > game.money then
+            c = DARK_GOLD
+        end
+        print(game.money, 3+7, 11, c)
+        for _, coin in ipairs(game.coins) do
+            coin:draw()
+        end
+    end
+    if game.status == 'action' then
+        print(math.floor(game.time / 60)..":"..math.floor(game.time % 60), 2, SCREEN_HEIGHT - 7, 6)
     end
 
+    for _, c in pairs(game.chests) do
+        c:draw()
+    end
+    for _, b in ipairs(game.bullets) do
+        b:draw()
+    end
+
+    
     if not(game.status == 'restart_menu' and game.death_time == 0) then
         game.player:draw()
     end
@@ -1869,6 +1848,7 @@ function game.draw_all()
     if game.restart_dialog and game.death_time == 0 then
         game.restart_dialog:draw()
     end
+
 
     if game.should_draw_preview then
         cls(C0)
@@ -1878,6 +1858,8 @@ function game.draw_all()
     if game.screen_animator then
         game.screen_animator:draw()
     end
+
+    game.prev_money = game.money
 end
 
 function game.draw()
@@ -1892,6 +1874,7 @@ function game.draw()
         if game.screen_animator then
             game.screen_animator:draw()
         end
+        qr.draw()
     else
         game.draw_all()
     end
@@ -1905,21 +1888,34 @@ end
 -- Bonus.T = Settings.bpm * 4 / 60.
 -- Bonus.TIME_TO_LIVE = 6.7
 
+Preview.SPEND = 'Spend money to restore the MUSIC FACTORY'
+Preview.EARN = 'Earn money from the MUSIC FACTORY'
 Preview.TEXT = {
-    'Music was once produced in MUSIC FACTORIES', 'like this one.', '',
-    'Then synthesizers became popular,', 'and MUSIC FACTORIES were no longer needed', ':-(','',
-    'You bought a MUSIC FACTORY.','',
+    -- 'Music was once produced in MUSIC FACTORIES', 'like this one.', '',
+    -- 'Then synthesizers became popular,', 'and MUSIC FACTORIES were no longer needed', ':-(','',
+    'You bought an abandoned MUSIC FACTORY.','',
     'Bring the MUSIC FACTORY back to life', 'and produce music again!',
+    '',
+    '',
+    Preview.EARN,
+    Preview.SPEND,
+    '',
+    '',
     '','','','',
     '                <press Z to continue>',
 }
+WinScreen.YOUR_TIME = 'Your time:'
+WinScreen.MY_TG = '                           @vcrocstudio'
 WinScreen.TEXT = {
     'You restored the MUSIC FACTORY!', '',
-    'Beautiful music fills the air  :-D', '',
+    -- 'Beautiful music fills the air  :-D', '',
     'Your neighbors are happy!', '', 'They thank you for bringing','the MUSIC FACTORY back.',
-    '','','','',
-    '','',
+    '',WinScreen.YOUR_TIME,'','',
     '                <press Z to restart>',
+    '',
+    '',
+    '                           Follow my tg :-)',
+    WinScreen.MY_TG,
 }
 
 KEY_W = 23
@@ -1982,13 +1978,33 @@ Player.HITBOX = { -- обе границы включены
 Player.HP = 6
 Player.I_TIME = 0.6
 
-Player.PAY_NOTE = Note:new(22+12, 0, 0, 0.34, 3)
+Player.PAY_NOTE = Note:new(22, 0, 3, 0.34, 3)
 
 Player.HURT_REACTION = 0.4 -- степень мерцания при получении урона
 
 FULL_HEART_SPRITE = 260
 HALF_HEART_SPRITE = 261
 EMPTY_HEART_SPRITE = 262
+
+
+Coin.sprite = {
+    flip = {
+        i = 1,
+        {id=128, T=0.1},
+        {id=129, T=0.05},
+        {id=130, T=0.1},
+        {id=129, T=0.05},
+        -- {id=131, T=0.05},
+        -- {id=132, T=0.05},
+        -- {id=133, T=0.05},
+        -- {id=134, T=0.05},
+        -- {id=135, T=0.05},
+    },
+    static = {
+        i = 1,
+        {id=128, T=-1},
+    }
+}
 
 
 PistonEnemy.sprite = {
@@ -2032,6 +2048,7 @@ PistonEnemy.sprite = {
 }
 PistonEnemy.HITBOX = {x1=1, y1=1, x2=6, y2=7}
 PistonEnemy.INTERBOX = {x1=-4, y1=-3, x2=13, y2=17} 
+PistonEnemy.COUNT_BULLETS = 6
 -- hitbox for INTERaction 🤪
 
 
@@ -2056,7 +2073,32 @@ Enemy.FEAR_TIME = 0.76
 
 Bullet.speed = 24
 
+Chest.sprite = {
+    static = {
+        i = 1,
+        {id=480, T=-1},
+    },
+    dieing = {
+        i = 1,
+        {id=482, T=-1},
+    },
+}
+Chest.HP = {small=10, big=25}
+Chest.HITBOX = {
+    x1 = 0,
+    y1 = 2,
+    x2 = 15,
+    y2 = 15,
+}
+Chest.DIE_T = 0.21
+-- начальная частота выдачи награды
+Chest.REWARD_FREQ = 0.11
+-- коэффициент ускорения
+Chest.REWARD_ACC = 0.8
+
 Sheet.load()
+
+
 -- END Data.lua
 
 game.init()

@@ -42,8 +42,6 @@ function Player:new(x, y)
 end
 
 function Player:move_as_possible(dx, dy)
-    self.x = self.x + dx
-    self.y = self.y + dy
 
     -- смещения под картинку игрока
     -- если изменить внешность игрока, то я умираю
@@ -53,24 +51,43 @@ function Player:move_as_possible(dx, dy)
     local y2 = self.hitbox.y2 + 3
 
     -- Горизонталь
+    self.x = self.x + dx
     if self.x + x1 < 0 then
         self.x = -x1
     elseif self.x + x2 > SCREEN_WIDTH then
         self.x = SCREEN_WIDTH - x2
     end
+    local hb1 = Collision.get_hitbox_by_object(self)
+    hb1 = Collision.get_hitbox_by_object(self)
+    for _, e in pairs(game.chests) do
+        local hb2 = Collision.get_hitbox_by_object(e)
+        if Collision.check(hb1, hb2) then
+            self.x = self.x - dx
+            break
+        end
+    end
 
     -- Вертикаль
+    self.y = self.y + dy
     if self.y + y1 < 0 then
         self.y = -y1
     elseif self.y + y2 > SCREEN_HEIGHT then
         self.y = SCREEN_HEIGHT - y2
     end
+    hb1 = Collision.get_hitbox_by_object(self)
+    for _, e in pairs(game.chests) do
+        local hb2 = Collision.get_hitbox_by_object(e)
+        if Collision.check(hb1, hb2) then
+            self.y = self.y - dy
+            break
+        end
+    end
+
+
+
+
     -- local hb1 = Collision.get_hitbox_by_object(self)
     -- hb1 = Collision.get_hitbox_by_object(self)
-
-
-
-
     -- for _, e in pairs(game.enemies) do
     --     local hb2 = Collision.get_hitbox_by_object(e)
     --     if Collision.check(hb1, hb2) then

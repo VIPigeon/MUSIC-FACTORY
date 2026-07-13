@@ -2,21 +2,34 @@
 -- Bonus.T = Settings.bpm * 4 / 60.
 -- Bonus.TIME_TO_LIVE = 6.7
 
+Preview.SPEND = 'Spend money to restore the MUSIC FACTORY'
+Preview.EARN = 'Earn money from the MUSIC FACTORY'
 Preview.TEXT = {
-    'Music was once produced in MUSIC FACTORIES', 'like this one.', '',
-    'Then synthesizers became popular,', 'and MUSIC FACTORIES were no longer needed', ':-(','',
-    'You bought a MUSIC FACTORY.','',
+    -- 'Music was once produced in MUSIC FACTORIES', 'like this one.', '',
+    -- 'Then synthesizers became popular,', 'and MUSIC FACTORIES were no longer needed', ':-(','',
+    'You bought an abandoned MUSIC FACTORY.','',
     'Bring the MUSIC FACTORY back to life', 'and produce music again!',
+    '',
+    '',
+    Preview.EARN,
+    Preview.SPEND,
+    '',
+    '',
     '','','','',
     '                <press Z to continue>',
 }
+WinScreen.YOUR_TIME = 'Your time:'
+WinScreen.MY_TG = '                           @vcrocstudio'
 WinScreen.TEXT = {
     'You restored the MUSIC FACTORY!', '',
-    'Beautiful music fills the air  :-D', '',
+    -- 'Beautiful music fills the air  :-D', '',
     'Your neighbors are happy!', '', 'They thank you for bringing','the MUSIC FACTORY back.',
-    '','','','',
-    '','',
+    '',WinScreen.YOUR_TIME,'','',
     '                <press Z to restart>',
+    '',
+    '',
+    '                           Follow my tg :-)',
+    WinScreen.MY_TG,
 }
 
 KEY_W = 23
@@ -79,13 +92,33 @@ Player.HITBOX = { -- обе границы включены
 Player.HP = 6
 Player.I_TIME = 0.6
 
-Player.PAY_NOTE = Note:new(22+12, 0, 0, 0.34, 3)
+Player.PAY_NOTE = Note:new(22, 0, 3, 0.34, 3)
 
 Player.HURT_REACTION = 0.4 -- степень мерцания при получении урона
 
 FULL_HEART_SPRITE = 260
 HALF_HEART_SPRITE = 261
 EMPTY_HEART_SPRITE = 262
+
+
+Coin.sprite = {
+    flip = {
+        i = 1,
+        {id=128, T=0.1},
+        {id=129, T=0.05},
+        {id=130, T=0.1},
+        {id=129, T=0.05},
+        -- {id=131, T=0.05},
+        -- {id=132, T=0.05},
+        -- {id=133, T=0.05},
+        -- {id=134, T=0.05},
+        -- {id=135, T=0.05},
+    },
+    static = {
+        i = 1,
+        {id=128, T=-1},
+    }
+}
 
 
 PistonEnemy.sprite = {
@@ -129,6 +162,7 @@ PistonEnemy.sprite = {
 }
 PistonEnemy.HITBOX = {x1=1, y1=1, x2=6, y2=7}
 PistonEnemy.INTERBOX = {x1=-4, y1=-3, x2=13, y2=17} 
+PistonEnemy.COUNT_BULLETS = 3 -- прибавляется хп игрока
 -- hitbox for INTERaction 🤪
 
 
@@ -153,4 +187,29 @@ Enemy.FEAR_TIME = 0.76
 
 Bullet.speed = 24
 
+Chest.sprite = {
+    static = {
+        i = 1,
+        {id=480, T=-1},
+    },
+    dieing = {
+        i = 1,
+        {id=482, T=-1},
+    },
+}
+Chest.HP = {small=10, big=25}
+Chest.HITBOX = {
+    x1 = 0,
+    y1 = 2,
+    x2 = 15,
+    y2 = 15,
+}
+Chest.DIE_T = 0.21
+-- начальная частота выдачи награды
+Chest.REWARD_FREQ = 0.11
+-- коэффициент ускорения
+Chest.REWARD_ACC = 0.8
+
 Sheet.load()
+
+

@@ -47,8 +47,10 @@ function Director:update()
                 e:attack()
                 current_note:play()
                 e:earn_money()
+                game.coins[1].y = game.coins[1].y - 1
             elseif prev_note then
                 e:release()
+                game.coins[1].y = game.coins[1].y + 1
             end
             if next_note then
                 e:prepare()

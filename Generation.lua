@@ -32,6 +32,7 @@ function Generation.get_places(k, w, h)
     local static_objects = {
         {x = 0,  y = 0, w = 4, h = 3},
         {x = 14, y = 7, w = 3, h = 3},
+        {x = 0,  y = 26, w = 4, h = 3},
     }
 
     local result = {}

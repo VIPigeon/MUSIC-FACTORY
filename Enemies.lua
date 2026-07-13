@@ -20,7 +20,8 @@ end
 -- end
 
 function Enemy:earn_money()
-    game.money = game.money + 1
+    local earn = self.earn or 1
+    game.money = game.money + earn
     self.money_time = Enemy.MONEY_TIME -- для анимации
 end
 
@@ -39,6 +40,7 @@ function PistonEnemy:new(x, y)
 
         money_time = 0,
         fear_time = 0, -- время страха призыва
+        earn = 2,
     }
     setmetatable(object, self)
     return object
@@ -59,7 +61,7 @@ function PistonEnemy:attack()
 
     self.sprite = table.copy(PistonEnemy.sprite.attack)
 
-    local COUNT_BULLETS = 5
+    local COUNT_BULLETS = PistonEnemy.COUNT_BULLETS + game.player.hp
     local SECTOR = 2*math.pi / COUNT_BULLETS
     for i = 1, COUNT_BULLETS do
         local bullet = Bullet:new(self.x+3, self.y+5)
@@ -94,7 +96,8 @@ function PistonEnemy:draw()
 
     spr(self.sprite[self.sprite.i].id, self.x, self.y, C0,1)
     if self.money_time > 0 then
-        print("+1", self.x, self.y - 5, Enemy.MONEY_COLOR)
+        local earn = self.earn or 1        
+        print("+"..earn, self.x, self.y - 5, Enemy.MONEY_COLOR)
     end
 end
 
@@ -204,7 +207,8 @@ function CircleEnemy:draw()
     end
 
     if self.money_time > 0 then
-        print("+1", self.x - 3, self.y - CircleEnemy.R - 7, Enemy.MONEY_COLOR)
+        local earn = self.earn or 1
+        print("+"..earn, self.x - 3, self.y - CircleEnemy.R - 7, Enemy.MONEY_COLOR)
     end
 end
 

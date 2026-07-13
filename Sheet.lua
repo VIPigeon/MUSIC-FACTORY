@@ -70,53 +70,76 @@ function Sheet.load() -- вызывается в Data
     Sheet.drum1 = {}
     Sheet.drum1.normal = Sheet.concat({
         Sheet.make_tact(Note:new(7, 12,0), 1),
+        Sheet.make_tact(false, 1),
         Sheet.make_tact(Note:new(7, 12,0), 1),
-        Sheet.make_tact(Note:new(7, 12,0), 1),
-        Sheet.make_tact(Note:new(7, 12,0), 1),
+        Sheet.make_tact(false, 1),
 
         Sheet.make_tact(Note:new(3, 12,0), 1),
+        Sheet.make_tact(false, 1),
         Sheet.make_tact(Note:new(3, 12,0), 1),
-        Sheet.make_tact(Note:new(3, 12,0), 1),
-        Sheet.make_tact(Note:new(3, 12,0), 1),
+        Sheet.make_tact(false, 1),
+
+        -- Sheet.make_tact(Note:new(7, 12,0), 1),
+        -- Sheet.make_tact(Note:new(7, 12,0), 1),
+
+        -- Sheet.make_tact(Note:new(3, 12,0), 1),
+        -- Sheet.make_tact(Note:new(3, 12,0), 1),
+        -- Sheet.make_tact(Note:new(3, 12,0), 1),
+        -- Sheet.make_tact(Note:new(3, 12,0), 1),
     })
 
     Sheet.drum2 = {}
     Sheet.drum2.normal = Sheet.concat({
-        Sheet.make_tact(Note:new(14, 12,0), 3),
-        Sheet.make_tact(Note:new(14, 12,0), 3),
-        Sheet.make_tact(Note:new(14, 12,0), 3),
-        Sheet.make_tact(Note:new(14, 12,0), 3),
+        Sheet.make_tact(Note:new(14, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(14, 12,0), 9),
+        Sheet.make_tact(false, 1),
 
-        Sheet.make_tact(Note:new(10, 12,0), 3),
-        Sheet.make_tact(Note:new(10, 12,0), 3),
-        Sheet.make_tact(Note:new(10, 12,0), 3),
-        Sheet.make_tact(Note:new(10, 12,0), 3),
+        Sheet.make_tact(Note:new(14, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(14, 12,0), 9),
+        Sheet.make_tact(false, 1),
+
+        -- Sheet.make_tact(Note:new(10, 12,0), 3),
+        -- Sheet.make_tact(Note:new(10, 12,0), 3),
+        -- Sheet.make_tact(Note:new(10, 12,0), 3),
+        -- Sheet.make_tact(Note:new(10, 12,0), 3),
     })
 
     Sheet.drum3 = {}
     Sheet.drum3.normal = Sheet.concat({
-        Sheet.make_tact(Note:new(19, 12,0), 9),
-        Sheet.make_tact(Note:new(19, 12,0), 9),
-        Sheet.make_tact(Note:new(19, 12,0), 9),
-        Sheet.make_tact(Note:new(19, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(19, 12,0), 1),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(19, 12,0), 1),
 
-        Sheet.make_tact(Note:new(15, 12,0), 9),
-        Sheet.make_tact(Note:new(15, 12,0), 9),
-        Sheet.make_tact(Note:new(15, 12,0), 9),
-        Sheet.make_tact(Note:new(15, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(15, 12,0), 1),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(15, 12,0), 1),
+
+        -- Sheet.make_tact(Note:new(15, 12,0), 9),
+        -- Sheet.make_tact(Note:new(15, 12,0), 9),
+        -- Sheet.make_tact(Note:new(15, 12,0), 9),
+        -- Sheet.make_tact(Note:new(15, 12,0), 9),
     })
 
     Sheet.drum4 = {}
     Sheet.drum4.normal = Sheet.concat({
-        Sheet.make_tact(Note:new(22, 12,0), 11),
-        Sheet.make_tact(Note:new(22, 12,0), 11),
-        Sheet.make_tact(Note:new(22, 12,0), 11),
-        Sheet.make_tact(Note:new(22, 12,0), 11),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(22, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(22, 12,0), 9),
 
-        Sheet.make_tact(Note:new(19, 12,0), 11),
-        Sheet.make_tact(Note:new(19, 12,0), 11),
-        Sheet.make_tact(Note:new(19, 12,0), 11),
-        Sheet.make_tact(Note:new(19, 12,0), 11),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(19, 12,0), 9),
+        Sheet.make_tact(false, 1),
+        Sheet.make_tact(Note:new(19, 12,0), 9),
+
+        -- Sheet.make_tact(Note:new(19, 12,0), 11),
+        -- Sheet.make_tact(Note:new(19, 12,0), 11),
+        -- Sheet.make_tact(Note:new(19, 12,0), 11),
+        -- Sheet.make_tact(Note:new(19, 12,0), 11),
     })
 
     Sheet.bell1 = {}

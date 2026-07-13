@@ -90,4 +90,3 @@ function table.chooseRandomElement(t)
     return choosen
 end
 
-return table

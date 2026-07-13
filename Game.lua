@@ -17,6 +17,9 @@ function game.init()
 end
 
 function game.restart()
+    game.prev_money = 0
+    game.time = 0
+
     game.flag = false
 
     Note.pivot = 36
@@ -30,7 +33,9 @@ function game.restart()
     game.survive_time_left = game.SURVIVE_TIME
     -- game.is_win = false
 
+    game.coins = {Coin:new(3, 12, false)} -- для анимаций, только и всего
     game.player = Player:new(14*8, 7*8)
+    -- game.player.hp = 1
     game.restart_dialog = false
     game.death_time = 0 -- задержка экрана во время смерти
 
@@ -48,11 +53,52 @@ function game.restart()
         bell4 = CircleEnemy:new(math.random(temp, SCREEN_WIDTH - temp), math.random(temp, SCREEN_HEIGHT - temp)),
     }  -- список всех противников по ролям
     game.bullets = {}
+    game.chests = {
+        small = nil,
+        big = nil,
+    }
     -- game.bonuses = {}
     game.money = 0
 
     local t = {
-        -- 'disco',
+        'drum1',
+        'drum2',
+        'drum3',
+        'drum4',
+        'big', -- большой сундук
+        'small', -- маленький сундук
+    }
+    shuffle(t)
+    table.concatTable(t,
+        {
+            'bell1',
+            'bell2',
+            'bell3',
+            'bell4',
+        }
+    )
+
+    -- расстановка
+    local places = Generation.get_places(10)
+    Generation.sort_by_center(places)
+    local i = 1
+    for _, place in ipairs(places) do
+        if t[i] == 'small' or t[i] == 'big' then
+            local chest = Chest:new(place.x*8 + 5, place.y*8 + 7, Chest.HP[t[i]])
+            game.chests[t[i]] = chest
+        else
+            local e = game.enemies[t[i]]
+            local x = place.x*8 + 10
+            local y = place.y*8 + 14
+            e:move(x, y)
+        end
+        i = i + 1
+    end
+    -- 
+
+    -- установка стоимостей
+
+    t = {
         'drum1',
         'drum2',
         'drum3',
@@ -63,24 +109,11 @@ function game.restart()
         'bell4',
     }
 
-    -- расстановка
-    local places = Generation.get_places(#t)
-    Generation.sort_by_center(places)
-    local i = 1
-    for _, place in ipairs(places) do
-        local e = game.enemies[t[i]]
-        local x = place.x*8 + 10
-        local y = place.y*8 + 14
-        e:move(x, y)
-        i = i + 1
-    end
-    --
-
-    -- установка стоимостей
     shuffle(t)
     local cost = {
         -- 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 5, 10, 25, 25, 50, 50, 100
+        -- 0, 5, 10, 25, 25, 50, 50, 100
+        0, 5, 10, 30, 30, 50, 50, 100
     }
 
     -- local delta_cost = 5
@@ -97,6 +130,23 @@ end
 
 function game.update()
     if game.status == 'action' then
+
+        for _, coin in ipairs(game.coins) do
+            if game.is_player_pay then
+                coin:update()
+            else
+                coin.animation.i = 1
+            end
+        end
+
+        for _, c in pairs(game.chests) do
+            if c.is_dead and c.reward == 0 then
+                game.chests[_] = nil
+            end
+            c:update()
+        end
+
+        game.time = game.time + Time.dt()
         if not game.is_final and game.is_all_active() then
             game.is_final = true
             Settings.bpm = 750
@@ -121,16 +171,18 @@ function game.update()
         Director:update()
         local player_rect = Collision.get_hitbox_by_object(game.player)
 
-        local is_player_pay = false
+        game.is_player_pay = false
         for _, e in pairs(game.enemies) do
             e:update()
             local eb = Collision.get_interbox_by_object(e)
             if Collision.check(player_rect, eb) then
+                if game.money > 0 and not e.is_active then
+                    game.is_player_pay = true
+                end
                 game.player:pay(e)
-                is_player_pay = true
             end
         end
-        if not is_player_pay then
+        if not game.is_player_pay then
             game.player.payment_T = Player.PAYMENT_FREQ
         end
 
@@ -141,6 +193,17 @@ function game.update()
             local b_rect = Collision.get_hitbox_by_object(b)
             if Collision.check(player_rect, b_rect) then
                 game.player:hurt()
+            end
+            for _, c in pairs(game.chests) do
+                if c.is_dead then
+                    goto continue
+                end
+                local c_rect = Collision.get_hitbox_by_object(c)
+                if Collision.check(c_rect, b_rect) then
+                    c:get_damage()
+                    table.insert(should_be_deleted, i)
+                end
+                ::continue::
             end
             if b.x > SCREEN_WIDTH + _d or b.x < -_d or b.y > SCREEN_HEIGHT + _d or b.y < -_d then
                 table.insert(should_be_deleted, i)
@@ -228,18 +291,35 @@ function game.draw_all()
     for _, e in pairs(game.enemies) do
         e:draw()
     end
-    for _, b in ipairs(game.bullets) do
-        b:draw()
-    end
 
     if game.is_final then
         print('SURVIVE', 3, 11, GOLD)
         -- +0.12 для драматизма
         print("0:"..tostring(math.floor(game.survive_time_left+0.12)), 3, 11 + 10, DARK_GOLD)
     else
-        print(game.money, 3, 11, GOLD)
+        local c = GOLD
+        -- if game.prev_money < game.money then
+            -- c = GOLD-1 -- light gold
+        if game.prev_money > game.money then
+            c = DARK_GOLD
+        end
+        print(game.money, 3+7, 11, c)
+        for _, coin in ipairs(game.coins) do
+            coin:draw()
+        end
+    end
+    if game.status == 'action' then
+        print(math.floor(game.time / 60)..":"..math.floor(game.time % 60), 2, SCREEN_HEIGHT - 7, 6)
     end
 
+    for _, c in pairs(game.chests) do
+        c:draw()
+    end
+    for _, b in ipairs(game.bullets) do
+        b:draw()
+    end
+
+    
     if not(game.status == 'restart_menu' and game.death_time == 0) then
         game.player:draw()
     end
@@ -247,6 +327,7 @@ function game.draw_all()
     if game.restart_dialog and game.death_time == 0 then
         game.restart_dialog:draw()
     end
+
 
     if game.should_draw_preview then
         cls(C0)
@@ -256,6 +337,8 @@ function game.draw_all()
     if game.screen_animator then
         game.screen_animator:draw()
     end
+
+    game.prev_money = game.money
 end
 
 function game.draw()
@@ -270,6 +353,7 @@ function game.draw()
         if game.screen_animator then
             game.screen_animator:draw()
         end
+        qr.draw()
     else
         game.draw_all()
     end

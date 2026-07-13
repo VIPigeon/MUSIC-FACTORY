@@ -13,6 +13,9 @@ require("ChangeScreenAnimator")
 require("RestartDialog")
 require("Preview")
 require("WinScreen")
+require("Coin")
+require("qr")
+require("Chest")
 
 -- Невероятно душные модули. Я их ненавижу
 require("Sheet")

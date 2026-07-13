@@ -25,8 +25,21 @@ function WinScreen:draw()
     local shadow_color = 6
 
     for _, line in ipairs(WinScreen.TEXT) do
-        print(line, x, y+1, shadow_color)
-        print(line, x, y, color)
+        local c = color
+        local sc = shadow_color
+        if line == WinScreen.MY_TG then
+            c = 3
+            sc = 7
+        end
+        print(line, x, y+1, sc)
+        print(line, x, y, c)
+        if line == WinScreen.YOUR_TIME then
+            local text = math.floor(game.time/60)..' : '..math.floor(game.time%60)..'.'..math.floor(game.time%60*100%100)
+            c = GOLD
+            sc = DARK_GOLD
+            print(text, x+#WinScreen.YOUR_TIME*6, y+1, sc)
+            print(text, x+#WinScreen.YOUR_TIME*6, y, c)
+        end
         y = y + dy
     end
     -- TextWithOutline.print("Z", x, y+1, outline_width, shadow_color, shadow_color, size, true)
