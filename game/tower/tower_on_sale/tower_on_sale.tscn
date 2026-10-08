@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://deikrp0xtp5sx"]
+
+[ext_resource type="Script" uid="uid://fwfi1m0xuobt" path="res://game/tower/tower_on_sale/tower_on_sale.gd" id="1_am0nq"]
+[ext_resource type="Theme" uid="uid://b2ukcd7owyrkd" path="res://game/ui/theme/theme.tres" id="2_am0nq"]
+[ext_resource type="PackedScene" uid="uid://b60g08486s6bt" path="res://game/component/inside_checker/inside_checker.tscn" id="3_6fgb8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b3sie"]
+size = Vector2(10, 9)
+
+[node name="TowerOnSale" type="Node2D" unique_id=2082962370]
+script = ExtResource("1_am0nq")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2115428803]
+
+[node name="CostLabel" type="Label" parent="." unique_id=1588069393]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -10.0
+offset_top = 5.0
+offset_right = 10.0
+offset_bottom = 15.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_am0nq")
+theme_override_colors/font_color = Color(0.06666667, 0.34901962, 0.34901962, 1)
+theme_override_font_sizes/font_size = 8
+text = "30"
+horizontal_alignment = 1
+
+[node name="BuyArea" parent="." unique_id=2067472729 instance=ExtResource("3_6fgb8")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BuyArea" unique_id=713510546]
+position = Vector2(0, -0.5)
+shape = SubResource("RectangleShape2D_b3sie")

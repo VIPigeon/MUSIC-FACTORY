@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://og2uhg8obmw0"]
+
+[ext_resource type="Script" uid="uid://cm484afy8vlak" path="res://game/ui/hud/currency/currency.gd" id="1_2lhj7"]
+[ext_resource type="Texture2D" uid="uid://bet2x4q1aacpm" path="res://game/ui/hud/currency/coin1.png" id="2_upk0b"]
+[ext_resource type="Texture2D" uid="uid://cg2cy6ipckd3i" path="res://game/ui/hud/currency/coin2.png" id="3_2gog1"]
+[ext_resource type="Theme" uid="uid://b2ukcd7owyrkd" path="res://game/ui/theme/theme.tres" id="4_2gog1"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_2hq7w"]
+frames = 2
+frame_0/texture = ExtResource("2_upk0b")
+frame_1/texture = ExtResource("3_2gog1")
+frame_1/duration = 1.0
+
+[node name="Currency" type="Control" unique_id=786786674]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("1_2lhj7")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=185460451]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 9.0
+theme_override_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=1135904749]
+layout_mode = 2
+texture = SubResource("AnimatedTexture_2hq7w")
+stretch_mode = 2
+
+[node name="Count" type="Label" parent="HBoxContainer" unique_id=115085319]
+layout_mode = 2
+theme = ExtResource("4_2gog1")
+theme_override_colors/font_color = Color(0.8666667, 0.7294118, 0.22352941, 1)
+theme_override_font_sizes/font_size = 6
+text = "0"
+
+[node name="AnimationTimer" type="Timer" parent="." unique_id=2100976154]
+wait_time = 0.3

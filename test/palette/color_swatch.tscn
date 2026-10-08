@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://cxwb5lhhs4y5f"]
+
+[ext_resource type="Script" uid="uid://ceal35of3i74x" path="res://test/palette/color_swatch.gd" id="1_1kolo"]
+
+[node name="ColorSwatch" type="Control" unique_id=1461322950]
+custom_minimum_size = Vector2(30, 30)
+custom_maximum_size = Vector2(30, 30)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_1kolo")
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=141435050]
+custom_minimum_size = Vector2(22, 22)
+custom_maximum_size = Vector2(22, 22)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -11.0
+offset_right = 11.0
+offset_bottom = 22.0
+grow_horizontal = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1395523664]
+custom_minimum_size = Vector2(20, 20)
+custom_maximum_size = Vector2(20, 20)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -10.0
+offset_right = 10.0
+offset_bottom = 20.0
+grow_horizontal = 2
+offset_transform_enabled = true
+offset_transform_position = Vector2(0, 1)
+
+[node name="HexColor" type="Label" parent="." unique_id=1816838774]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 7
+text = "ffffff"
+horizontal_alignment = 1

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://bu4ig5joh4xnx"]
+
+[ext_resource type="Script" uid="uid://u7accbahu4u5" path="res://game/bullet/bullet.gd" id="1_nd35d"]
+[ext_resource type="Texture2D" uid="uid://c8rbjhmwajq7w" path="res://game/bullet/bullet.png" id="2_s4i6l"]
+[ext_resource type="PackedScene" uid="uid://davcs8mysvxf0" path="res://game/component/kill_parent_after_timeout/kill_parent_after_timeout.tscn" id="3_1qqop"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2hq7w"]
+size = Vector2(3, 3)
+
+[node name="Bullet" type="Area2D" unique_id=831844718 groups=["Bullet"]]
+collision_layer = 4
+monitorable = false
+script = ExtResource("1_nd35d")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=394712308]
+z_index = 2
+texture = ExtResource("2_s4i6l")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=589913865]
+position = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_2hq7w")
+
+[node name="KillParentAfterTimeout" parent="." unique_id=1780624502 instance=ExtResource("3_1qqop")]
+wait_time = 20.0

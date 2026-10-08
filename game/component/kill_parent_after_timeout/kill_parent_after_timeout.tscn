@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://davcs8mysvxf0"]
+
+[ext_resource type="Script" uid="uid://claahq21otg0p" path="res://game/component/kill_parent_after_timeout/kill_parent_after_timeout.gd" id="1_7txv8"]
+
+[node name="KillParentAfterTimeout" type="Timer" unique_id=1780624502]
+one_shot = true
+autostart = true
+script = ExtResource("1_7txv8")

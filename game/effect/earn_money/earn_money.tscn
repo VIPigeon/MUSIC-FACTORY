@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bao7joqjvbo8d"]
+
+[ext_resource type="Theme" uid="uid://b2ukcd7owyrkd" path="res://game/ui/theme/theme.tres" id="1_mhrqg"]
+[ext_resource type="PackedScene" uid="uid://davcs8mysvxf0" path="res://game/component/kill_parent_after_timeout/kill_parent_after_timeout.tscn" id="2_l3d2v"]
+
+[node name="EarnMoney" type="Label" unique_id=728480905]
+offset_right = 40.0
+offset_bottom = 23.0
+theme = ExtResource("1_mhrqg")
+theme_override_colors/font_color = Color(0.5372549, 0.42745098, 0.10980392, 1)
+text = "+1"
+
+[node name="KillParentAfterTimeout" parent="." unique_id=1780624502 instance=ExtResource("2_l3d2v")]
+wait_time = 0.75

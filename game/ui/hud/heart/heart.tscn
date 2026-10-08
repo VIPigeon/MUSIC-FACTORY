@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://b2awulagoipvw"]
+
+[ext_resource type="Script" uid="uid://bvr35hjbbqbp0" path="res://game/ui/hud/heart/heart.gd" id="1_ljp1n"]
+[ext_resource type="Texture2D" uid="uid://k2cd27080dqm" path="res://game/ui/hud/heart/heart.png" id="1_tsupy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2hq7w"]
+atlas = ExtResource("1_tsupy")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ljp1n"]
+atlas = ExtResource("1_tsupy")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssui6"]
+atlas = ExtResource("1_tsupy")
+region = Rect2(16, 0, 8, 8)
+
+[node name="Heart" type="Control" unique_id=1200593045]
+custom_minimum_size = Vector2(8, 8)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_ljp1n")
+
+[node name="EmptyHeart" type="TextureRect" parent="." unique_id=683421611]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_2hq7w")
+stretch_mode = 2
+
+[node name="HalfHeart" type="TextureRect" parent="." unique_id=474706013]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_ljp1n")
+stretch_mode = 2
+
+[node name="FullHeart" type="TextureRect" parent="." unique_id=2140546101]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = SubResource("AtlasTexture_ssui6")
+stretch_mode = 2

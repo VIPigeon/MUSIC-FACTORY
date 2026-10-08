@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://b60g08486s6bt"]
+
+[ext_resource type="Script" uid="uid://0grkatmuhsl6" path="res://game/component/inside_checker/inside_checker.gd" id="1_i7srs"]
+
+[node name="Area2DInsideChecker" type="Area2D" unique_id=2067472729]
+monitorable = false
+script = ExtResource("1_i7srs")

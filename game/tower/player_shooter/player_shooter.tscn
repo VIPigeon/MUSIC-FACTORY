@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cddl2vlq7y4da"]
+
+[ext_resource type="Script" uid="uid://vrcyf647kpju" path="res://game/tower/player_shooter/player_shooter.gd" id="1_h3qf3"]
+[ext_resource type="SpriteFrames" uid="uid://cvex7dy365koe" path="res://game/tower/player_shooter/sprite_frames.tres" id="2_ei0fg"]
+[ext_resource type="AudioStream" uid="uid://crlbu1bhtiupm" path="res://resource/sound/synth1.wav" id="3_sokou"]
+
+[node name="Tower" type="Node2D" unique_id=980889445]
+script = ExtResource("1_h3qf3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1177652171]
+sprite_frames = ExtResource("2_ei0fg")
+animation = &"idle"
+autoplay = "inactive"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1508779699]
+stream = ExtResource("3_sokou")
+volume_db = -5.0
+max_polyphony = 4

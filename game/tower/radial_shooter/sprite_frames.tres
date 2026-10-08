@@ -1,0 +1,70 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://b0dviuofy8rv7"]
+
+[ext_resource type="Texture2D" uid="uid://b6vhl07eu3pfq" path="res://game/tower/radial_shooter/tower_radial_shooter.png" id="1_l31af"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_75qds"]
+atlas = ExtResource("1_l31af")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_an11r"]
+atlas = ExtResource("1_l31af")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vi3w8"]
+atlas = ExtResource("1_l31af")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rof12"]
+atlas = ExtResource("1_l31af")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tcpf1"]
+atlas = ExtResource("1_l31af")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8iu1x"]
+atlas = ExtResource("1_l31af")
+region = Rect2(40, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5v38s"]
+atlas = ExtResource("1_l31af")
+region = Rect2(48, 0, 8, 8)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_75qds")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_an11r")
+}],
+"loop": 1,
+"name": &"inactive",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vi3w8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rof12")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tcpf1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8iu1x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5v38s")
+}],
+"loop": 0,
+"name": &"shoot",
+"speed": 10.0
+}]

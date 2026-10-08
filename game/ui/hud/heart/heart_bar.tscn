@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cnlr1h7g8thx4"]
+
+[ext_resource type="Script" uid="uid://b78ykkhwfxni2" path="res://game/ui/hud/heart/heart_bar.gd" id="1_3qwdj"]
+
+[node name="HeartBar" type="Control" unique_id=1575202349]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_3qwdj")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=592877817]
+layout_mode = 1
+offset_right = 24.0
+offset_bottom = 8.0
+theme_override_constants/separation = 0

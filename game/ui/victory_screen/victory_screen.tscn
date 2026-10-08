@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://ctnxptsonhabb"]
+
+[ext_resource type="Theme" uid="uid://b2ukcd7owyrkd" path="res://game/ui/theme/theme.tres" id="1_mhkk7"]
+[ext_resource type="Script" uid="uid://37s1y8mnx83s" path="res://game/ui/victory_screen/victory_screen.gd" id="2_mhkk7"]
+[ext_resource type="FontFile" uid="uid://b2o6uu8ijrgb6" path="res://game/ui/theme/megamax.ttf" id="3_h4jx8"]
+
+[node name="VictoryScreen" type="Control" unique_id=960730296]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_mhkk7")
+script = ExtResource("2_mhkk7")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1305184328]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1894794349]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Text" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1934654720]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.9098039, 0.81960785, 1)
+theme_override_colors/font_shadow_color = Color(0.4117647, 0.3882353, 0.34901962, 1)
+theme_override_constants/line_spacing = 3
+theme_override_constants/shadow_offset_x = 0
+theme_override_fonts/font = ExtResource("3_h4jx8")
+theme_override_font_sizes/font_size = 8
+text = "You restored the music factory!
+
+Your neighbours are happy!
+
+They thank you for bringing the music factory back.
+
+your time: 1000000 seconds"
+autowrap_mode = 2
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer" unique_id=156021267]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="ControlZ" type="Label" parent="MarginContainer/VBoxContainer2" unique_id=747329341]
+layout_mode = 2
+size_flags_vertical = 8
+theme = ExtResource("1_mhkk7")
+theme_override_colors/font_color = Color(0.9607843, 0.9098039, 0.81960785, 1)
+theme_override_colors/font_shadow_color = Color(0.4117647, 0.3882353, 0.34901962, 1)
+theme_override_constants/shadow_offset_x = 0
+text = "<Press Z to restart>"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ControlX" type="Label" parent="MarginContainer/VBoxContainer2" unique_id=1144851092]
+layout_mode = 2
+size_flags_vertical = 8
+theme = ExtResource("1_mhkk7")
+theme_override_colors/font_color = Color(0.8666667, 0.3372549, 0.22352941, 1)
+theme_override_colors/font_shadow_color = Color(0.5294118, 0.20784314, 0.13725491, 1)
+theme_override_constants/shadow_offset_x = 0
+text = "<Press X to play speedup>"
+horizontal_alignment = 1
+vertical_alignment = 1

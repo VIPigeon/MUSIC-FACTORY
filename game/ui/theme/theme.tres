@@ -1,0 +1,7 @@
+[gd_resource type="Theme" format=3 uid="uid://b2ukcd7owyrkd"]
+
+[ext_resource type="FontFile" uid="uid://b2o6uu8ijrgb6" path="res://game/ui/theme/megamax.ttf" id="1_5nhmw"]
+
+[resource]
+default_font = ExtResource("1_5nhmw")
+default_font_size = 8

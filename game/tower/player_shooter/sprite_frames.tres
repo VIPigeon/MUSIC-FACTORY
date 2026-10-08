@@ -1,0 +1,30 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://cvex7dy365koe"]
+
+[ext_resource type="Texture2D" uid="uid://bwwna4yxf4m5e" path="res://game/tower/player_shooter/tower_player_shooter.png" id="1_mjq82"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sokou"]
+atlas = ExtResource("1_mjq82")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xa0dg"]
+atlas = ExtResource("1_mjq82")
+region = Rect2(0, 0, 16, 16)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sokou")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xa0dg")
+}],
+"loop": 1,
+"name": &"inactive",
+"speed": 5.0
+}]

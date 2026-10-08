@@ -1,0 +1,13 @@
+[gd_scene format=3 uid="uid://drp01wb2l3tdt"]
+
+[ext_resource type="Script" uid="uid://f1c7wsko2pnt" path="res://main/config.gd" id="1_x1050"]
+
+[node name="Config" type="Node" unique_id=1449186836]
+script = ExtResource("1_x1050")
+player_speed = 60.0
+bpm = 75.0
+godmode = true
+tower_buy_animation_min_delay = 0.05
+tower_buy_animation_max_delay = 0.2
+tower_buy_animation_time_to_full_speed = 0.7
+bullet_speed = 30.0

@@ -1,0 +1,6 @@
+class_name Tower
+
+enum Kind {
+	PLAYER_SHOOTER,
+	RADIAL_SHOOTER,
+}

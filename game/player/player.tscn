@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://kcxl4qh3oikg"]
+
+[ext_resource type="Script" uid="uid://d1utuce445tqc" path="res://game/player/player.gd" id="1_8csaa"]
+[ext_resource type="Texture2D" uid="uid://dxd7bmbis8oln" path="res://game/player/player.png" id="2_b2mth"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2hq7w"]
+size = Vector2(3, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8soms"]
+atlas = ExtResource("2_b2mth")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a4w0n"]
+atlas = ExtResource("2_b2mth")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5fytw"]
+atlas = ExtResource("2_b2mth")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4ste8"]
+atlas = ExtResource("2_b2mth")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_anr75"]
+atlas = ExtResource("2_b2mth")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2hq7w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8soms")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a4w0n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5fytw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4ste8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_anr75")
+}],
+"loop": 1,
+"name": &"run",
+"speed": 10.0
+}]
+
+[node name="Player" type="Area2D" unique_id=168763561 groups=["Player"]]
+script = ExtResource("1_8csaa")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1707870580]
+position = Vector2(-0.5, 0.5)
+shape = SubResource("RectangleShape2D_2hq7w")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1157747658]
+z_index = 1
+sprite_frames = SubResource("SpriteFrames_2hq7w")
+animation = &"run"
+autoplay = "idle"
+frame_progress = 0.8905731
+
+[node name="InvincibilityFramesTimer" type="Timer" parent="." unique_id=1260730079]
+wait_time = 0.5
+one_shot = true
