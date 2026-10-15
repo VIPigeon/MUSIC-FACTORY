@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cswj3rcyii0es"]
+
+[ext_resource type="Script" uid="uid://bjq278sr1jwxn" path="res://game/track_viewer/toggle.gd" id="1_jp5cw"]
+
+[node name="TrackToggle" type="ColorRect" unique_id=501531362]
+custom_minimum_size = Vector2(16, 16)
+script = ExtResource("1_jp5cw")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]
