@@ -105,9 +105,7 @@ func generate_starting_field(costs: Array[int], music_config_: Array[MusicConfig
 		var tower_position = random_position_in_rect(field_rect)
 		while tower_position.distance_to(player.position) < 10.0:
 			tower_position = random_position_in_rect(field_rect)
-		var kind := Tower.Kind.RADIAL_SHOOTER if randi_range(0, 1) == 0 else Tower \
-				.Kind \
-				.PLAYER_SHOOTER
+		var kind: Tower.Kind = Tower.Kind.values().pick_random()
 		last = tower_controller.create_tower_on_sale(
 			kind,
 			tower_position,
