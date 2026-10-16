@@ -1,4 +1,6 @@
-class_name TrackToggle extends ColorRect
+class_name TrackEditorToggle extends ColorRect
+
+signal toggled(state: bool)
 
 var color_on: Color = Color.WHITE
 var color_off: Color = Color.BLACK
@@ -18,3 +20,4 @@ func _on_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
 		state = !state
 		update_color()
+		toggled.emit(state)
