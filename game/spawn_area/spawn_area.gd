@@ -18,12 +18,12 @@ func _ready() -> void:
 		return
 
 	if object_to_spawn == null:
-		push_warning("SpawnArea: нечего спавнить")
+		Log.warn(name, "нет объекта для спавна")
 		return
 
 	var spawn_position: Variant = _get_random_point_in_rect()
 	if spawn_position == null:
-		push_warning("SpawnArea: невозможно определить точку спавна")
+		Log.warn(name, "не обнаружена прямоугольная зона спавна")
 		return
 
 	var instance := object_to_spawn.instantiate()
@@ -32,9 +32,9 @@ func _ready() -> void:
 	if instance is Node2D:
 		instance.global_position = global_position + spawn_position
 	else:
-		push_warning(
-			"SpawnArea: объект {0} не является Node2D, невозможно задать позицию"
-			.format([instance])
+		Log.warn(
+			name,
+			"объект {0} не является Node2D, невозможно задать позицию".format([instance.name]),
 		)
 
 
@@ -67,7 +67,6 @@ func _get_collision_shape() -> CollisionShape2D:
 
 #region CONFIG_WARNINGS
 
-
 func _get_configuration_warnings() -> PackedStringArray:
 	var warnings := PackedStringArray()
 
@@ -83,7 +82,9 @@ func _get_configuration_warnings() -> PackedStringArray:
 				collision_shape = child
 
 	if shape_count == 0 or collision_shape == null:
-		warnings.append("Для SpawnArea нужен дочерний CollisionShape2D дабы задать прямоугольник спавна")
+		warnings.append(
+			"Для SpawnArea нужен дочерний CollisionShape2D дабы задать прямоугольник спавна"
+		)
 		return warnings
 
 	if collision_shape.shape == null or collision_shape.shape is not RectangleShape2D:
@@ -99,8 +100,8 @@ func _notification(what: int) -> void:
 	# Перепроверяем конфигурацию после следующих событий
 	match what:
 		NOTIFICATION_CHILD_ORDER_CHANGED, \
-		NOTIFICATION_EDITOR_PRE_SAVE,\
-		NOTIFICATION_TRANSFORM_CHANGED:
+				NOTIFICATION_EDITOR_PRE_SAVE, \
+				NOTIFICATION_TRANSFORM_CHANGED:
 			update_configuration_warnings()
 
 #endregion CONFIG_WARNINGS
