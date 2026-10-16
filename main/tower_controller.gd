@@ -16,10 +16,12 @@ var tower_on_sale_scene := preload("uid://deikrp0xtp5sx")
 var tower_scene_by_kind: Dictionary = {
 	Tower.Kind.PLAYER_SHOOTER: preload("uid://cddl2vlq7y4da"),
 	Tower.Kind.RADIAL_SHOOTER: preload("uid://c5rpryhtwlqdb"),
+	Tower.Kind.LINE_SHOOTER: preload("uid://cebhlbd5lvb1u"),
 }
 var sprite_frames_by_kind: Dictionary = {
 	Tower.Kind.PLAYER_SHOOTER: preload("uid://cvex7dy365koe"),
 	Tower.Kind.RADIAL_SHOOTER: preload("uid://b0dviuofy8rv7"),
+	Tower.Kind.LINE_SHOOTER: preload("res://game/tower/line_shooter/sprite_frames.tres"),
 }
 
 
@@ -57,7 +59,10 @@ func create_tower_on_sale(
 	)
 	tower_for_sale_parent.add_child(tower_on_sale)
 	tower_on_sale.sprite.frames = sprite_frames_by_kind[kind]
-	tower_on_sale.sprite.play("inactive")
+	if kind == Tower.Kind.LINE_SHOOTER:
+		LineShooter.setup_on_sale(tower_on_sale)
+	else:
+		tower_on_sale.sprite.play("inactive")
 	return tower_on_sale
 
 
@@ -71,6 +76,8 @@ func on_tower_bought(tower_on_sale: TowerOnSale) -> void:
 	tower.timing = tower_on_sale.music_config.timing
 	if kind == Tower.Kind.PLAYER_SHOOTER:
 		tower.target = player
+	elif kind == Tower.Kind.LINE_SHOOTER:
+		tower.take_direction_from(tower_on_sale)
 	tower.shot.connect(bullet_controller.spawn_bullet)
 	tower.shot.connect(award_money)
 	tower_parent.add_child(tower)
