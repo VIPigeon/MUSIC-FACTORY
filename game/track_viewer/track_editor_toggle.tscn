@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cswj3rcyii0es"]
+
+[ext_resource type="Script" uid="uid://bjq278sr1jwxn" path="res://game/track_viewer/track_editor_toggle.gd" id="1_bwvl8"]
+
+[node name="TrackToggle" type="ColorRect" unique_id=501531362]
+custom_minimum_size = Vector2(8, 6)
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -3.0
+offset_right = 8.0
+offset_bottom = 3.0
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+script = ExtResource("1_bwvl8")
+
+[connection signal="gui_input" from="." to="." method="_on_gui_input"]

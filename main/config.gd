@@ -8,7 +8,8 @@ class_name ConfigGlobal extends Node
 
 
 @export_category("Rhythm")
-@export var bpm: float = 10.0
+@export var bpm: float = 60.0
+@export var beats_in_tact: int = 16
 
 
 @export_category("Dev")

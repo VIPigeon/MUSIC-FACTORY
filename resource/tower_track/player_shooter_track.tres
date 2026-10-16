@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="TowerTrack" format=3 uid="uid://dp33ra7057rbg"]
+
+[ext_resource type="Script" uid="uid://bm10rb81c2auf" path="res://main/tower_track.gd" id="1_m4ej8"]
+
+[resource]
+script = ExtResource("1_m4ej8")
+tacts = Array[String](["123412341341234"])
+metadata/_custom_type_script = "uid://bm10rb81c2auf"

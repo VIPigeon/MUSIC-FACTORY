@@ -14,7 +14,7 @@ var gui_node: Control
 
 var tower_controller: TowerController
 var bullet_controller: BulletController
-var rhythm_shooting: RhythmShooting
+var music_director: MusicDirector
 var player: Player
 var player_bank: Bank
 var hud: HUD
@@ -36,7 +36,7 @@ func _init(world_node_: Node2D, gui_node_: Control) -> void:
 
 
 func tick(delta: float) -> void:
-	rhythm_shooting.tick(delta)
+	music_director.tick(delta)
 
 	if player != null:
 		var player_rect := Rect2(player.position - Vector2(3.0, 3.0), Vector2(6, 6))
@@ -97,7 +97,8 @@ func generate_starting_field(costs: Array[int], music_config_: Array[MusicConfig
 	bullet_controller = BulletController.new(world_node)
 	tower_controller = TowerController.new(world_node, player_bank, player, bullet_controller)
 	tower_controller.tower_bought.connect(on_tower_bought)
-	rhythm_shooting = RhythmShooting.new(tower_controller)
+	music_director = MusicDirector.new()
+	music_director.beat.connect(_on_beat)
 
 	var last: TowerOnSale
 	for i in range(len(costs)):
@@ -139,3 +140,10 @@ func create_speed_up() -> void:
 func on_tower_bought() -> void:
 	if len(tower_controller.towers) == len(track_config):
 		start_endgame()
+
+
+func _on_beat(_tact: int, beat: int) -> void:
+	for tower in tower_controller.towers: 
+		var tact := tower.track.tacts[0]
+		if tact[beat] != '0':
+			tower.shoot()

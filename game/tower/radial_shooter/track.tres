@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TowerTrack" format=3 uid="uid://clurdpgkysoko"]
+
+[ext_resource type="Script" uid="uid://bm10rb81c2auf" path="res://main/tower_track.gd" id="1_v606j"]
+[ext_resource type="AudioStream" uid="uid://crlbu1bhtiupm" path="res://resource/sound/synth1.wav" id="2_iyp67"]
+[ext_resource type="AudioStream" uid="uid://dd517vmv2v6m2" path="res://resource/sound/synth3.wav" id="3_tyvp5"]
+
+[resource]
+script = ExtResource("1_v606j")
+tacts = Array[String](["0010000000020000"])
+sounds = Array[AudioStream]([ExtResource("2_iyp67"), ExtResource("3_tyvp5")])

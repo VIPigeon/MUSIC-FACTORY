@@ -3,6 +3,8 @@ class_name BaseTower extends Node2D
 
 signal shot(position: Vector2, direction: Vector2)
 
+@export var track: TowerTrack
+
 var timing: int
 var sound: AudioStream
 var kind: Tower.Kind

@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://bfi3x2tknkgp6"]
+
+[ext_resource type="Script" uid="uid://b0dwdk05isnrk" path="res://game/track_viewer/track_editor.gd" id="1_jrq4c"]
+[ext_resource type="Resource" uid="uid://dkjkf6k8d8ogc" path="res://game/tower/player_shooter/track.tres" id="2_d2u7m"]
+
+[node name="TrackEditor" type="Control" unique_id=1691395315 node_paths=PackedStringArray("track_line_container")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_jrq4c")
+track = ExtResource("2_d2u7m")
+track_line_container = NodePath("VBoxContainer/MarginContainer/VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=577826610]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="VBoxContainer" unique_id=1104161414]
+layout_mode = 2
+theme_override_font_sizes/font_size = 5
+text = "Инструкция: каждая строчка это инструмент, накликай ритм и нажми Ctrl + S, результат сохранится в res://resource/track/generated.tres. Скопируй его куда-нибудь, а потом поставь на башню."
+autowrap_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1380515149]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer" unique_id=1797797497]
+layout_mode = 2
