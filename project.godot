@@ -20,10 +20,13 @@ Config="*uid://drp01wb2l3tdt"
 
 [display]
 
-window/size/viewport_width=240
-window/size/viewport_height=136
-window/stretch/mode="canvas_items"
+window/size/viewport_width=480
+window/size/viewport_height=272
+window/size/window_width_override=960
+window/size/window_height_override=544
+window/stretch/mode="viewport"
 window/stretch/aspect="expand"
+window/stretch/scale_mode="integer"
 
 [editor_plugins]
 

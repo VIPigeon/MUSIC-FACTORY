@@ -21,23 +21,23 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 6
-theme_override_constants/margin_top = 6
-theme_override_constants/margin_right = 6
-theme_override_constants/margin_bottom = 6
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1894794349]
 layout_mode = 2
-theme_override_constants/separation = 18
+theme_override_constants/separation = 36
 
 [node name="Text" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1934654720]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.9607843, 0.9098039, 0.81960785, 1)
 theme_override_colors/font_shadow_color = Color(0.4117647, 0.3882353, 0.34901962, 1)
-theme_override_constants/line_spacing = 3
+theme_override_constants/line_spacing = 6
 theme_override_constants/shadow_offset_x = 0
 theme_override_fonts/font = ExtResource("2_mjf70")
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 16
 text = "You bought an abandoned MUSIC FACTORY.
 
 Bring the MUSIC FACTORY back to life and produce music again!"
@@ -48,12 +48,12 @@ layout_mode = 2
 theme = ExtResource("1_6dtmf")
 theme_override_colors/font_color = Color(1, 0.9019608, 0.44313726, 1)
 theme_override_colors/font_shadow_color = Color(0.5372549, 0.42745098, 0.10980392, 1)
-theme_override_constants/line_spacing = 1
+theme_override_constants/line_spacing = 2
 theme_override_constants/shadow_offset_x = 0
 theme_override_constants/shadow_offset_y = 1
 theme_override_constants/shadow_outline_size = 1
 theme_override_fonts/font = ExtResource("2_mjf70")
-theme_override_font_sizes/font_size = 8
+theme_override_font_sizes/font_size = 16
 text = "Earn money from the MUSIC FACTORY
 Spend money to restore the MUSIC FACTORY"
 autowrap_mode = 2
@@ -69,6 +69,7 @@ theme = ExtResource("1_6dtmf")
 theme_override_colors/font_color = Color(0.9607843, 0.9098039, 0.81960785, 1)
 theme_override_colors/font_shadow_color = Color(0.4117647, 0.3882353, 0.34901962, 1)
 theme_override_constants/shadow_offset_x = 0
+theme_override_font_sizes/font_size = 16
 text = "<Press Z to continue>"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -80,6 +81,7 @@ theme = ExtResource("1_6dtmf")
 theme_override_colors/font_color = Color(0.8666667, 0.3372549, 0.22352941, 1)
 theme_override_colors/font_shadow_color = Color(0.5294118, 0.20784314, 0.13725491, 1)
 theme_override_constants/shadow_offset_x = 0
+theme_override_font_sizes/font_size = 16
 text = "<Press X to play speedup>"
 horizontal_alignment = 1
 vertical_alignment = 1

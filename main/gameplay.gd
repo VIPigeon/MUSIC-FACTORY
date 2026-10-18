@@ -32,7 +32,13 @@ func _init(world_node_: Node2D, gui_node_: Control) -> void:
 	self.world_node = world_node_
 	self.gui_node = gui_node_
 	self.player_bank = Bank.new(Config.starting_money)
-	self.game_rect = Rect2(Vector2(0, 0), Vector2(240, 135))
+	self.game_rect = Rect2(
+		Vector2.ZERO,
+		Vector2(
+			ProjectSettings.get_setting("display/window/size/viewport_width"),
+			ProjectSettings.get_setting("display/window/size/viewport_height"),
+		),
+	)
 
 
 func tick(delta: float) -> void:
