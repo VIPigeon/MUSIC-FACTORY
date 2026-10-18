@@ -9,7 +9,7 @@ var time_passed: float = 0.0
 
 
 func _draw() -> void:
-	draw_rect(Rect2(Vector2(0.0, 0.0), Vector2(240.0, 135.0)), Color.hex(0x696359FF), false, 1.0)
+	draw_rect(Rect2(Vector2.ONE, size - Vector2(2.0, 2.0)), Color.hex(0x696359FF), false, 2.0)
 
 
 func _process(delta: float) -> void:
