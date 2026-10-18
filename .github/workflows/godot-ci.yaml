@@ -31,12 +31,15 @@ jobs:
           mkdir -v -p build/windows
           EXPORT_DIR="$(readlink -f build)"
           godot --headless --verbose --export-release "Windows Desktop" "$EXPORT_DIR/windows/$EXPORT_NAME.exe"
+      - name: Package Windows
+        working-directory: build/windows
+        run: zip -r "../$EXPORT_NAME-windows.zip" .
       - name: Release
         uses: softprops/action-gh-release@v3
         with:
-          working_directory: build/windows
-          files: |
-            *
+          working_directory: build
+          files: ${{ env.EXPORT_NAME }}-windows.zip
+          fail_on_unmatched_files: true
 
   export-linux:
     name: Linux Export
@@ -55,12 +58,15 @@ jobs:
           mkdir -v -p build/linux
           EXPORT_DIR="$(readlink -f build)"
           godot --headless --verbose --export-release "Linux/X11" "$EXPORT_DIR/linux/$EXPORT_NAME.x86_64"
+      - name: Package Linux
+        working-directory: build/linux
+        run: zip -r "../$EXPORT_NAME-linux.zip" .
       - name: Release
         uses: softprops/action-gh-release@v3
         with:
-          working_directory: build/windows
-          files: |
-            *
+          working_directory: build
+          files: ${{ env.EXPORT_NAME }}-linux.zip
+          fail_on_unmatched_files: true
 
   export-web:
     name: Web Export
