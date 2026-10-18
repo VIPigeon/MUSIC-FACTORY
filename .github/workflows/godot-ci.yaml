@@ -1,8 +1,11 @@
-name: "godot-ci export"
+name: "Build and Deploy"
 on:
   push:
     tags:
       - "v*"
+
+permissions:
+  contents: write
 
 env:
   GODOT_VERSION: 4.7.2
@@ -28,11 +31,12 @@ jobs:
           mkdir -v -p build/windows
           EXPORT_DIR="$(readlink -f build)"
           godot --headless --verbose --export-release "Windows Desktop" "$EXPORT_DIR/windows/$EXPORT_NAME.exe"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Release
+        uses: softprops/action-gh-release@v3
         with:
-          name: windows
-          path: build/windows
+          working_directory: build/windows
+          files: |
+            *
 
   export-linux:
     name: Linux Export
@@ -51,11 +55,12 @@ jobs:
           mkdir -v -p build/linux
           EXPORT_DIR="$(readlink -f build)"
           godot --headless --verbose --export-release "Linux/X11" "$EXPORT_DIR/linux/$EXPORT_NAME.x86_64"
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      - name: Release
+        uses: softprops/action-gh-release@v3
         with:
-          name: linux
-          path: build/linux
+          working_directory: build/windows
+          files: |
+            *
 
   export-web:
     name: Web Export
@@ -79,3 +84,7 @@ jobs:
         with:
           name: web
           path: build/web
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: build/web
