@@ -7,7 +7,6 @@ class_name TrackEditor extends Control
 var track_line_scene := preload("uid://pdg8fsjjca83")
 
 var track_lines: Array[TrackEditorLine]
-var colors: Array[Color] = [Color.YELLOW, Color.LIME, Color.INDIAN_RED, Color.SKY_BLUE, Color.WEB_PURPLE]
 
 var cur_track: Array[int]
 
@@ -26,22 +25,6 @@ func _ready() -> void:
 		track_lines.append(track_line)
 
 
-func _on_change() -> void:
-	var res: Array[int]
-	res.resize(beats_per_tact)
-	
-	var line_index := 0
-	for line in track_lines:
-		var total := 0
-		var j := 0
-		for c in line.tact:
-			if c == '1':
-				res[j] += 1 << line_index
-			j += 1
-			
-		line_index += 1
-		
-	cur_track = res
 
 
 func _unhandled_input(event: InputEvent) -> void:

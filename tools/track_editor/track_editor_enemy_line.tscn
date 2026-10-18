@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://c7ruvtw52blr7"]
+
+[ext_resource type="Script" uid="uid://ddoqpqe8qqxs5" path="res://tools/track_editor/track_editor_enemy_line.gd" id="1_0hoak"]
+[ext_resource type="Texture2D" uid="uid://bwwna4yxf4m5e" path="res://game/tower/player_shooter/tower_player_shooter.png" id="2_qph5o"]
+
+[node name="EnemyLine" type="HBoxContainer" unique_id=272843177]
+script = ExtResource("1_0hoak")
+
+[node name="Header" type="VBoxContainer" parent="." unique_id=844491568]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="Header" unique_id=1120124201]
+layout_mode = 2
+texture = ExtResource("2_qph5o")
+stretch_mode = 2
+
+[node name="PlayButton" type="Button" parent="Header" unique_id=971487079]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Play"
+
+[node name="AddTactButton" type="Button" parent="Header" unique_id=1107546461]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "+ Tact"
+
+[node name="NoteEditor" type="VBoxContainer" parent="." unique_id=848215104]
+layout_mode = 2
+
+[connection signal="pressed" from="Header/PlayButton" to="." method="_on_play_button_pressed"]
+[connection signal="pressed" from="Header/AddTactButton" to="." method="_on_add_tact_button_pressed"]

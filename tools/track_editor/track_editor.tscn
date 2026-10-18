@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://bfi3x2tknkgp6"]
+
+[ext_resource type="Script" uid="uid://b0dwdk05isnrk" path="res://tools/track_editor/track_editor.gd" id="1_ibmrf"]
+[ext_resource type="Resource" uid="uid://dkjkf6k8d8ogc" path="res://game/tower/player_shooter/track.tres" id="2_h65g4"]
+[ext_resource type="Script" uid="uid://ddoqpqe8qqxs5" path="res://tools/track_editor/track_editor_enemy_line.gd" id="3_ibmrf"]
+[ext_resource type="Texture2D" uid="uid://bwwna4yxf4m5e" path="res://game/tower/player_shooter/tower_player_shooter.png" id="3_sjks3"]
+
+[node name="TrackEditor" type="Control" unique_id=1691395315 node_paths=PackedStringArray("track_line_container")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_ibmrf")
+track = ExtResource("2_h65g4")
+track_line_container = NodePath("VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=577826610]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tutorial" type="Label" parent="VBoxContainer" unique_id=1104161414]
+layout_mode = 2
+theme_override_font_sizes/font_size = 5
+text = "Инструкция: каждая строчка это инструмент, накликай ритм и нажми Ctrl + S, результат сохранится в res://resource/track/generated.tres. Скопируй его куда-нибудь, а потом поставь на башню."
+autowrap_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer" unique_id=1380515149]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/MarginContainer" unique_id=1680172763]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer" unique_id=1797797497]
+layout_mode = 2
+
+[node name="EnemyLine" type="HBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer" unique_id=1780814572]
+layout_mode = 2
+script = ExtResource("3_ibmrf")
+
+[node name="Header" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/EnemyLine" unique_id=1972658108]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/EnemyLine/Header" unique_id=782122992]
+layout_mode = 2
+texture = ExtResource("3_sjks3")
+stretch_mode = 2
+
+[node name="PlayButton" type="Button" parent="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/EnemyLine/Header" unique_id=1776526192]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Play"
+
+[node name="AddTactButton" type="Button" parent="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/EnemyLine/Header" unique_id=1670173258]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "+ Tact"
+
+[node name="NoteEditor" type="VBoxContainer" parent="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/EnemyLine" unique_id=1110590858]
+layout_mode = 2
+
+[connection signal="pressed" from="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/EnemyLine/Header/PlayButton" to="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/EnemyLine" method="_on_play_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/EnemyLine/Header/AddTactButton" to="VBoxContainer/MarginContainer/ScrollContainer/VBoxContainer/EnemyLine" method="_on_add_tact_button_pressed"]

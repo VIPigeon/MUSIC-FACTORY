@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cswj3rcyii0es"]
 
-[ext_resource type="Script" uid="uid://bjq278sr1jwxn" path="res://game/track_viewer/track_editor_toggle.gd" id="1_bwvl8"]
+[ext_resource type="Script" uid="uid://bjq278sr1jwxn" path="res://tools/track_editor/track_editor_toggle.gd" id="1_bwvl8"]
 
 [node name="TrackToggle" type="ColorRect" unique_id=501531362]
 custom_minimum_size = Vector2(8, 6)

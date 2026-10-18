@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://pdg8fsjjca83"]
+
+[ext_resource type="Script" uid="uid://jy72vi2fb7lu" path="res://tools/track_editor/track_editor_line.gd" id="1_8d28x"]
+
+[node name="TrackLine" type="HBoxContainer" unique_id=799232695]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 2
+script = ExtResource("1_8d28x")
+
+[node name="Label" type="Label" parent="." unique_id=767488233]
+layout_mode = 2
+theme_override_font_sizes/font_size = 8
+text = "Instrument"

@@ -39,7 +39,8 @@ folder_colors={
 "res://game/ui/": "teal",
 "res://main/": "red",
 "res://resource/": "yellow",
-"res://test/": "gray"
+"res://test/": "gray",
+"res://tools/": "pink"
 }
 
 [global_group]
