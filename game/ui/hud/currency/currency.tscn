@@ -20,20 +20,22 @@ script = ExtResource("1_2lhj7")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=185460451]
 layout_mode = 1
-offset_right = 24.0
-offset_bottom = 9.0
+offset_right = 48.0
+offset_bottom = 18.0
 theme_override_constants/separation = 0
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer" unique_id=1135904749]
 layout_mode = 2
 texture = SubResource("AnimatedTexture_2hq7w")
-stretch_mode = 2
+custom_minimum_size = Vector2(16, 16)
+size_flags_vertical = 4
+expand_mode = 1
 
 [node name="Count" type="Label" parent="HBoxContainer" unique_id=115085319]
 layout_mode = 2
 theme = ExtResource("4_2gog1")
 theme_override_colors/font_color = Color(0.8666667, 0.7294118, 0.22352941, 1)
-theme_override_font_sizes/font_size = 6
+theme_override_font_sizes/font_size = 11
 text = "0"
 
 [node name="AnimationTimer" type="Timer" parent="." unique_id=2100976154]
