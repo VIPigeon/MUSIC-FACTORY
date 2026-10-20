@@ -1,0 +1,14 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dg6srh3x4pdyq"]
+
+[ext_resource type="Texture2D" uid="uid://ox51gusakwrh" path="res://game/tower/triangle/triangle.png" id="1_texture"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_texture")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]

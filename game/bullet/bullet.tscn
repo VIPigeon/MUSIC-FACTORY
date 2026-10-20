@@ -9,7 +9,6 @@ size = Vector2(3, 3)
 
 [node name="Bullet" type="Area2D" unique_id=831844718 groups=["Bullet"]]
 collision_layer = 4
-monitorable = false
 script = ExtResource("1_nd35d")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=394712308]
