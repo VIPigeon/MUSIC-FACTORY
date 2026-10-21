@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SpawnConfig" format=3 uid="uid://cgeiew6j8nkt6"]
+
+[ext_resource type="Script" uid="uid://bbym4ruoyd2sm" path="res://game/level_processing/spawn_config.gd" id="1_h0gx2"]
+[ext_resource type="PackedScene" uid="uid://kcxl4qh3oikg" path="res://game/player/player.tscn" id="3_pgycv"]
+[ext_resource type="PackedScene" uid="uid://cebhlbd5lvb1u" path="res://game/tower/line_shooter/line_shooter.tscn" id="4_3itfk"]
+
+[resource]
+script = ExtResource("1_h0gx2")
+spawn_map = Dictionary[String, PackedScene]({
+"player": ExtResource("3_pgycv"),
+"tower": ExtResource("4_3itfk")
+})
+metadata/_custom_type_script = "uid://bbym4ruoyd2sm"
