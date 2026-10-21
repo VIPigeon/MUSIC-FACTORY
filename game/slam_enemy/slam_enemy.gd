@@ -51,7 +51,7 @@ func _on_area_entered(area: Area2D) -> void:
 func _on_beat(_tact: int, _beat: int) -> void:
 	position.x = _target_x
 	wall_hit.emit()
-	sound.play()
+	#sound.play()
 	
 	_from_x = _target_x
 	_target_x = _left_x if _target_x == _right_x else _right_x

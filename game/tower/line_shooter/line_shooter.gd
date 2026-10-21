@@ -23,7 +23,6 @@ func _ready() -> void:
 		func():
 			play_animation(sprite, direction, "idle"),
 	)
-	player = $AudioStreamPlayer2D
 
 
 func shoot() -> void:

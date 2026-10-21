@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="TowerTrack" format=3 uid="uid://dw77kx037crhp"]
+
+[ext_resource type="Script" uid="uid://bm10rb81c2auf" path="res://main/tower_track.gd" id="1_ux760"]
+[ext_resource type="AudioStream" uid="uid://bgeaqaltynun4" path="res://resource/sound/marble_factory_single/BLOCK_03_Wood_01.wav" id="2_ux760"]
+
+[resource]
+script = ExtResource("1_ux760")
+tacts = Array[int]([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1])
+sounds = Array[AudioStream]([ExtResource("2_ux760")])
+metadata/_custom_type_script = "uid://bm10rb81c2auf"
