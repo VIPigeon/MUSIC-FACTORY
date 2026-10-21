@@ -24,6 +24,7 @@ var state: State
 var survival_time: float
 var track_config: Array[MusicConfig]
 
+var slam_enemy_scene := preload("res://game/slam_enemy/slam_enemy.tscn")
 var hud_scene := preload("uid://b20kj0ig0pnw4")
 var player_scene := preload("uid://kcxl4qh3oikg")
 
@@ -106,6 +107,13 @@ func generate_starting_field(costs: Array[int], music_config_: Array[MusicConfig
 	music_director = MusicDirector.new()
 	music_director.beat.connect(_on_beat)
 
+	# фу.. 🦍
+	var slam_enemy := slam_enemy_scene.instantiate()
+	var lane_y := game_rect.size.y * (0.75 if player.position.y < game_rect.size.y * 0.5 else 0.25)
+	slam_enemy.position = Vector2(game_rect.position.x + 8.0, lane_y)
+	world_node.add_child(slam_enemy)
+	slam_enemy.setup(music_director, game_rect)
+
 	var last: TowerOnSale
 	for i in range(len(costs)):
 		var tower_position = random_position_in_rect(field_rect)
@@ -147,7 +155,8 @@ func on_tower_bought() -> void:
 
 
 func _on_beat(_tact: int, beat: int) -> void:
-	for tower in tower_controller.towers: 
-		var tact := tower.track.tacts[0]
-		if tact[beat] != '0':
-			tower.shoot()
+	for tower in tower_controller.towers:
+		if tower.track != null and len(tower.track.tacts) > 0:
+			var tact := tower.track.tacts[0]
+			if tact[beat] != '0':
+				tower.shoot()
