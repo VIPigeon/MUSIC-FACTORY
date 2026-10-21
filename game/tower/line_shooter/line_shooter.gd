@@ -9,6 +9,14 @@ const VECTOR_BY_DIRECTION := {
 	Direction.UP: Vector2.UP,
 }
 
+const ANIMATION_SUFFIX_BY_DIRECTION := {
+	Direction.RIGHT: "_right",
+	# отдельной анимации влево нет, отражаем правую
+	Direction.LEFT: "_right",
+	Direction.DOWN: "_down",
+	Direction.UP: "_up",
+}
+
 const INACTIVE_COLOR := Color(0.6, 0.6, 0.6)
 const SALE_DIRECTION_META := &"line_shooter_direction"
 
@@ -47,7 +55,7 @@ func take_direction_from(tower_on_sale: TowerOnSale) -> void:
 
 
 static func play_animation(sprite_: AnimatedSprite2D, direction_: Direction, action: String) -> void:
-	var horizontal := direction_ == Direction.RIGHT or direction_ == Direction.LEFT
 	sprite_.flip_h = direction_ == Direction.LEFT
-	sprite_.flip_v = direction_ == Direction.UP
-	sprite_.play(action + ("_horizontal" if horizontal else "_vertical"))
+	sprite_.play(action + ANIMATION_SUFFIX_BY_DIRECTION[direction_])
+	# play() той же анимации не перезапускает ее, а выстрел должен начинаться сначала
+	sprite_.frame = 0
