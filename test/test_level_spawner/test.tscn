@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://r5r6v7bbl3xq"]
+
+[ext_resource type="PackedScene" uid="uid://tctg5wok8uaa" path="res://test/test_level_spawner/test.tmx" id="1_m32xx"]
+[ext_resource type="Script" uid="uid://d1d8mcutk8dq2" path="res://game/level_processing/level_spawner.gd" id="2_yc8tn"]
+
+[node name="test" unique_id=1772318462 instance=ExtResource("1_m32xx")]
+script = ExtResource("2_yc8tn")
