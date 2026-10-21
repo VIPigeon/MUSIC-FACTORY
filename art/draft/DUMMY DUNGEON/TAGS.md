@@ -1,0 +1,1 @@
+top view, 2D, dungeon, castle, RPG, retro, pixel art, fantasy, 1bit, tileset, animations, knight, skeleton, top-down, side view, sprite sheets
