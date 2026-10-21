@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ce45eues7w5ls"
-path="res://.godot/imported/xylophone_key_vertical.png-cd7c928be778dbfa144358b7b0e4a961.ctex"
+uid="uid://7xuxknf310of"
+path="res://.godot/imported/bell-enemy.png-0c9f9eff74adf1de96cd8f1832b7157c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/tower/line_shooter/xylophone_key_vertical.png"
-dest_files=["res://.godot/imported/xylophone_key_vertical.png-cd7c928be778dbfa144358b7b0e4a961.ctex"]
+source_file="res://game/tower/line_shooter/bell-enemy.png"
+dest_files=["res://.godot/imported/bell-enemy.png-0c9f9eff74adf1de96cd8f1832b7157c.ctex"]
 
 [params]
 

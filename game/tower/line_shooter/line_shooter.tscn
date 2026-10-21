@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cebhlbd5lvb1u"]
 
 [ext_resource type="Script" uid="uid://dq1nqh66d7eb8" path="res://game/tower/line_shooter/line_shooter.gd" id="1_script"]
-[ext_resource type="Resource" path="res://game/tower/line_shooter/track.tres" id="2_track"]
-[ext_resource type="SpriteFrames" path="res://game/tower/line_shooter/sprite_frames.tres" id="3_frames"]
+[ext_resource type="Resource" uid="uid://riu7f0lrfhlc" path="res://game/tower/line_shooter/track.tres" id="2_track"]
+[ext_resource type="SpriteFrames" uid="uid://d3vm2qri15dpw" path="res://game/tower/line_shooter/sprite_frames.tres" id="3_frames"]
 [ext_resource type="AudioStream" uid="uid://crlbu1bhtiupm" path="res://resource/sound/synth1.wav" id="4_sound"]
 
 [node name="LineShooter" type="Node2D" unique_id=471467041]
@@ -11,9 +11,7 @@ track = ExtResource("2_track")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1171780104]
 sprite_frames = ExtResource("3_frames")
-animation = &"shoot_vertical"
-frame = 9
-frame_progress = 1.0
+animation = &"idle_right"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=933266556]
 stream = ExtResource("4_sound")
