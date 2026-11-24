@@ -1,16 +1,15 @@
-class_name Player extends Area2D
+class_name Player extends CharacterBody2D
 
 @onready var sprite := $AnimatedSprite2D
 @onready var iframes := $InvincibilityFramesTimer
+@onready var wall_shape: RectangleShape2D = $WallCollider.shape
 
 var health := Health.new(Config.player_health)
-var last_position: Vector2
 ## куда смотрит игрок "down", "side" или "up"
 var facing := "down"
 
 
-func _process(delta: float) -> void:
-	last_position = position
+func _physics_process(_delta: float) -> void:
 	var vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
 	if vector.length_squared() > 0.1:
@@ -20,14 +19,15 @@ func _process(delta: float) -> void:
 		# айдл в ту сторону, куда последний раз шли
 		sprite.play("idle_" + facing)
 
-	position += vector * Config.player_speed * delta
+	velocity = vector * Config.player_speed
+	move_and_slide()
+
 	if iframes.time_left > 0.0:
 		modulate = Color.YELLOW
+	elif health.is_dead:
+		modulate = Color.BLACK
 	else:
-		if health.is_dead:
-			modulate = Color(0.0, 0.0, 0.0)
-		else:
-			modulate = Color.WHITE
+		modulate = Color.WHITE
 
 
 func take_damage(damage: int = 1) -> void:

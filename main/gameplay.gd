@@ -19,7 +19,6 @@ var player: Player
 var player_bank: Bank
 var hud: HUD
 
-var game_rect: Rect2
 var state: State
 var survival_time: float
 var track_config: Array[MusicConfig]
@@ -32,22 +31,14 @@ func _init(world_node_: Node2D, gui_node_: Control) -> void:
 	self.world_node = world_node_
 	self.gui_node = gui_node_
 	self.player_bank = Bank.new(Config.starting_money)
-	self.game_rect = Rect2(
-		Vector2.ZERO,
-		Vector2(
-			ProjectSettings.get_setting("display/window/size/viewport_width"),
-			ProjectSettings.get_setting("display/window/size/viewport_height"),
-		),
-	)
 
 
 func tick(delta: float) -> void:
 	music_director.tick(delta)
 
 	if player != null:
-		var player_rect := Rect2(player.position - Vector2(3.0, 3.0), Vector2(6, 6))
-		if !game_rect.encloses(player_rect):
-			player.position = player.last_position
+		var margin := player.wall_shape.size / 2 + Vector2(2, 2) # Толщина рамки HUD — 2 пикселя.
+		player.position = player.position.clamp(margin, hud.size - margin)
 
 	if state == State.ENDGAME:
 		survival_time -= delta

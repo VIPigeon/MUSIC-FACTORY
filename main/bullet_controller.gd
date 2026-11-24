@@ -24,6 +24,6 @@ func spawn_bullet(position: Vector2, direction: Vector2) -> void:
 
 
 func _on_bullet_area_entered(area: Area2D) -> void:
-	var player := area as Player
+	var player := area.get_parent() as Player
 	if player != null:
 		player.take_damage()

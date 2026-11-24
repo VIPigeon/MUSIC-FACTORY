@@ -6,6 +6,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2hq7w"]
 size = Vector2(3.333333, 3.2388663)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(12, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_b2mth"]
 atlas = ExtResource("2_b2mth")
 region = Rect2(0, 0, 16, 16)
@@ -270,10 +273,17 @@ animations = [{
 "speed": 10.0
 }]
 
-[node name="Player" type="Area2D" unique_id=168763561 groups=["Player"]]
+[node name="Player" type="CharacterBody2D" unique_id=168763561 groups=["Player"]]
+collision_layer = 0
+motion_mode = 1
 script = ExtResource("1_8csaa")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1707870580]
+[node name="WallCollider" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="Hitbox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1707870580]
 position = Vector2(-2.9802322e-07, -5.9604645e-08)
 scale = Vector2(2.787, 4)
 shape = SubResource("RectangleShape2D_2hq7w")
