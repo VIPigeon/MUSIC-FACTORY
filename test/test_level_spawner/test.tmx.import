@@ -19,5 +19,5 @@ no_alternative_tiles=false
 map_wangset_to_terrain=false
 custom_data_prefix="data_"
 tiled_project_file=""
-post_processor=""
+post_processor="uid://b01n8otohd1cl"
 save_tileset_to=""

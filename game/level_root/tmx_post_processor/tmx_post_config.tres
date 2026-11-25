@@ -6,6 +6,6 @@
 [resource]
 script = ExtResource("2_wq0j0")
 spawn_map = Dictionary[String, int]({
-"tower": 0
+"tower": 2
 })
 metadata/_custom_type_script = "uid://bbym4ruoyd2sm"
