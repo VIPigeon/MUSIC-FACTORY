@@ -30,15 +30,20 @@ func _init(
 	bank_: Bank,
 	player_: Player,
 	bullet_controller_: BulletController,
+	owner: Node = null, # нужно, если башни потом надо сохранить вместе с уровнем
 ) -> void:
 	tower_parent = Node2D.new()
 	tower_parent.name = "Towers"
 	world_node_.add_child(tower_parent)
+	if owner != null:
+		tower_parent.owner = owner
 	Log.info("Создан узел для башен %s с названием %s" % [tower_parent, tower_parent.name])
 
 	tower_for_sale_parent = Node2D.new()
 	tower_for_sale_parent.name = "TowersForSale"
 	world_node_.add_child(tower_for_sale_parent)
+	if owner != null:
+		tower_for_sale_parent.owner = owner
 	Log.info(
 		"Создан узел для башен на продажу %s с названием %s"
 		% [tower_for_sale_parent, tower_for_sale_parent.name]

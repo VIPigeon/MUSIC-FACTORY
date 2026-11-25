@@ -42,7 +42,7 @@ func _post_process(base_node: Node2D) -> Node2D:
 	base_node.tile_layers = _tile_layers
 
 	# TODO возможно TowerController стоит сделать полноценным узлом и сохранять в сцене?
-	var tower_controller := TowerController.new(base_node, null, null, null)
+	var tower_controller := TowerController.new(base_node, null, null, null, base_node)
 	var used_cells: Array[Vector2i] = _spawn_layer.get_used_cells()
 	for cell in used_cells:
 		_process_spawn_cell(tower_controller, _spawn_layer, cell, base_node)
