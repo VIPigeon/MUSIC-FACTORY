@@ -1,6 +1,6 @@
 class_name TowerOnSale extends Node2D
 
-signal bought
+signal bought(tower_on_sale: TowerOnSale)
 signal buy_tick
 
 @onready var cost_label: Label = $CostLabel
