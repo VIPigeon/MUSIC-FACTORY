@@ -15,6 +15,7 @@ var _ordered_layers: Array[TileMapLayer] = []
 var _spawn_layer: TileMapLayer = null
 ## Слой со стенами локации.
 var _wall_layer: TileMapLayer = null
+## Скрипт (класс) для корня уровня.
 var _root_level_script: Script = preload("res://game/level_root/level_root.gd")
 
 
@@ -44,10 +45,12 @@ func _post_process(base_node: Node2D) -> Node2D:
 	var tower_controller := TowerController.new(base_node, null, null, null)
 	var used_cells: Array[Vector2i] = _spawn_layer.get_used_cells()
 	for cell in used_cells:
-		_process_spawn_cell(tower_controller, _spawn_layer, cell)
+		_process_spawn_cell(tower_controller, _spawn_layer, cell, base_node)
+
 	# вместо удаления тайлов, просто отключаю слой
 	# эти тайлы потом будут полезны для определения бывших тайлов со спавном
 	_spawn_layer.enabled = false
+	Log.info("Слой со спавном отключён после обработки")
 
 	return base_node
 
@@ -73,31 +76,49 @@ func _process_spawn_cell(
 	tower_controller: TowerController,
 	layer: TileMapLayer,
 	cell: Vector2i,
+	base_node: Node2D,
 ) -> void:
+	Log.debug("Обработка ячейки %s из слоя %s" % [cell, layer.name])
+
+	# Игрок
+	if layer.get_cell_tile_data(cell).has_meta(_spawn_config.player_tag):
+		var player: Player = _spawn_config.player_scene.instantiate()
+		player.position = layer.map_to_local(cell)
+		base_node.add_child(player)
+		player.owner = base_node
+		Log.info("Игрок добавлен в ячейку %s" % cell)
+		return
+
+	# Всё остальное
 	var cnt: int = 0
-	var spawn_map: Dictionary[String, PackedScene] = _spawn_config.spawn_map
+	var spawn_map: Dictionary[String, Tower.Kind] = _spawn_config.spawn_map
 	for key: String in spawn_map.keys():
 		if not layer.get_cell_tile_data(cell).has_meta(key):
 			continue
 		cnt += 1
 
-		tower_controller.create_tower_on_sale()
-		var instance: Node2D = spawn_map[key].instantiate() as Node2D
-		if instance == null:
-			Log.err("Сцена для ключа '%s' не является Node2D" % key)
-			continue
+		var kind: Tower.Kind = spawn_map[key]
+		var tower_position: Vector2 = layer.map_to_local(cell)
+		Log.debug("Создание башни с типом %s через TowerController" % Tower.Kind.find_key(kind))
+		# TODO башни без информации о музыке, я пока хз как это скриптом делать
+		# и надо ли.
+		tower_controller.create_tower_on_sale(kind, tower_position, -1, null, base_node)
 
-		instance.position = layer.map_to_local(cell)
-		add_child(instance)
-
-		var direction: Vector2 = _get_tile_direction(layer, cell)
-		var look_point: Vector2 = direction + instance.global_position
-		instance.look_at(look_point)
+		# TODO пока хз как нормально направление сделать
+		#var direction: Vector2 = _get_tile_direction(layer, cell)
+		#var look_point: Vector2 = direction + instance.global_position
+		#instance.look_at(look_point)
 
 	if cnt == 0:
-		Log.warn("Ячейка в позиции %s ничего не заспавнила" % [cell])
+		Log.warn("Ячейка спавна в позиции %s ничего не заспавнила" % [cell])
 	if cnt > 1:
-		Log.warn("Ячейка в позиции %s совпадает с несколькими ключами" % [cell])
+		Log.warn(
+			"Ячейка спавна в позиции %s совпадает с несколькими ключами, возможно в одной
+			точке находится несколько противников"
+			% [cell]
+		)
+
+	Log.debug("Конец обработки ячейки %s из слоя %s" % [cell, layer.name])
 
 
 ## Получить направление тайла.

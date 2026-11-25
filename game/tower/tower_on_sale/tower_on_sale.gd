@@ -7,15 +7,15 @@ signal buy_tick
 @onready var buy_area: Area2DInsideChecker = $BuyArea
 @onready var sprite := $AnimatedSprite2D
 
-var cost: int
-var kind: Tower.Kind
+@export var cost: int
+@export var kind: Tower.Kind
 var buy_in_progress: bool = false
 
 var hold_time: float = 0.0
 var current_hold_time: float = 0.0
 var current_buy_delay: float = 0.0
 
-var music_config: MusicConfig
+@export var music_config: MusicConfig
 
 
 func _process(delta: float) -> void:

@@ -1,4 +1,5 @@
 class_name MusicConfig
+extends Resource
 
 var sound: AudioStream
 var timing: int

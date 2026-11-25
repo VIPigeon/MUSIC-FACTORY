@@ -25,14 +25,24 @@ var sprite_frames_by_kind: Dictionary = {
 }
 
 
-func _init(world_node_: Node2D, bank_: Bank, player_: Player, bullet_controller_: BulletController) -> void:
+func _init(
+	world_node_: Node2D,
+	bank_: Bank,
+	player_: Player,
+	bullet_controller_: BulletController,
+) -> void:
 	tower_parent = Node2D.new()
 	tower_parent.name = "Towers"
 	world_node_.add_child(tower_parent)
+	Log.info("Создан узел для башен %s с названием %s" % [tower_parent, tower_parent.name])
 
 	tower_for_sale_parent = Node2D.new()
 	tower_for_sale_parent.name = "TowersForSale"
 	world_node_.add_child(tower_for_sale_parent)
+	Log.info(
+		"Создан узел для башен на продажу %s с названием %s"
+		% [tower_for_sale_parent, tower_for_sale_parent.name]
+	)
 
 	self.bank = bank_
 	self.player = player_
@@ -45,8 +55,14 @@ func create_tower_on_sale(
 	position: Vector2,
 	cost: int,
 	music_config: MusicConfig,
+	owner: Node = null, # нужно, если башню потом надо сохранить вместе с уровнем
 ) -> TowerOnSale:
-	var tower_on_sale := tower_on_sale_scene.instantiate()
+	Log.debug(
+		"Начало создания TowerOnSale с типом башни %s; стоимостью %s монет в позиции %s"
+		% [Tower.Kind.find_key(kind), cost, position]
+	)
+
+	var tower_on_sale: TowerOnSale = tower_on_sale_scene.instantiate()
 	tower_on_sale.kind = kind
 	tower_on_sale.cost = cost
 	tower_on_sale.position = position
@@ -58,11 +74,18 @@ func create_tower_on_sale(
 				tower_on_sale.tick_buy(),
 	)
 	tower_for_sale_parent.add_child(tower_on_sale)
+	if owner != null:
+		tower_on_sale.owner = owner
 	tower_on_sale.sprite.frames = sprite_frames_by_kind[kind]
 	if kind == Tower.Kind.LINE_SHOOTER:
 		LineShooter.setup_on_sale(tower_on_sale)
 	else:
 		tower_on_sale.sprite.play("inactive")
+
+	Log.info(
+		"Создан TowerOnSale с типом башни %s; стоимостью %s монет в позиции %s"
+		% [Tower.Kind.find_key(kind), cost, position]
+	)
 	return tower_on_sale
 
 
