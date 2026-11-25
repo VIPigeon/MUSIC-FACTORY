@@ -1,4 +1,4 @@
-class_name SpawnConfig
+class_name TmxPostConfig
 extends Resource
 
 ## Название слоя со спавном сущностей.
