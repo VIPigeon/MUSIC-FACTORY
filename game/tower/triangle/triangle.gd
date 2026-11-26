@@ -1,6 +1,7 @@
 class_name Triangle extends BaseTower
 
 const INACTIVE_COLOR := Color(0.6, 0.6, 0.6)
+const ALPHA_CUTOFF_MATERIAL := preload("res://game/tower/triangle/alpha_cutoff.tres")
 
 ## на сколько шагов делится полный оборот. один шаг = один бит из трека
 @export var steps_per_turn := 12
@@ -47,4 +48,7 @@ func _on_split_area_entered(area: Area2D) -> void:
 ## готовит треугольник на продаже: затемненный спрайт
 static func setup_on_sale(tower_on_sale: TowerOnSale) -> void:
 	tower_on_sale.sprite.play("idle")
+	tower_on_sale.sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+	tower_on_sale.sprite.material = ALPHA_CUTOFF_MATERIAL
+	tower_on_sale.sprite.scale = Vector2(0.03125, 0.031185031)
 	tower_on_sale.sprite.modulate = INACTIVE_COLOR
