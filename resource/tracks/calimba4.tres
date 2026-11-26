@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TowerTrack" format=3 uid="uid://c2twqb2xjpmdq"]
+
+[ext_resource type="Script" uid="uid://bm10rb81c2auf" path="res://main/tower_track.gd" id="1_n8ddo"]
+[ext_resource type="AudioStream" uid="uid://c3henj18xkgkn" path="res://resource/sound/marble_factory_single/KEY_01_Kalimba_Arpeggio_04.wav" id="2_n8ddo"]
+[ext_resource type="AudioStream" uid="uid://ddydbwpnikrjy" path="res://resource/sound/marble_factory_single/KEY_01_Kalimba_Arpeggio_08.wav" id="3_ms3p5"]
+[ext_resource type="AudioStream" uid="uid://dinku2pydwxwc" path="res://resource/sound/marble_factory_single/KEY_01_Kalimba_Arpeggio_12.wav" id="4_w0vel"]
+[ext_resource type="AudioStream" uid="uid://w085kqi7p8vx" path="res://resource/sound/marble_factory_single/KEY_01_Kalimba_Arpeggio_16.wav" id="5_xkn6c"]
+
+[resource]
+script = ExtResource("1_n8ddo")
+tacts = Array[int]([0, 0, 0, 1, 0, 0, 0, 2, 0, 0, 0, 3, 0, 0, 0, 4])
+sounds = Array[AudioStream]([ExtResource("2_n8ddo"), ExtResource("3_ms3p5"), ExtResource("4_w0vel"), ExtResource("5_xkn6c")])
+metadata/_custom_type_script = "uid://bm10rb81c2auf"

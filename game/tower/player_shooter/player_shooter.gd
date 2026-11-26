@@ -7,7 +7,6 @@ var target: Node2D
 
 func _ready() -> void:
 	sprite.play("idle")
-	player = $AudioStreamPlayer2D
 
 
 func shoot() -> void:

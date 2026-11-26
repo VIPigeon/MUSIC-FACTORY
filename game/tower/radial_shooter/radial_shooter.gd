@@ -11,7 +11,6 @@ func _ready() -> void:
 		func():
 			sprite.play("idle"),
 	)
-	player = $AudioStreamPlayer2D
 
 
 func shoot() -> void:

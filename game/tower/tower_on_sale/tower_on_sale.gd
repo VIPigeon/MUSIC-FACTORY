@@ -15,7 +15,7 @@ var hold_time: float = 0.0
 var current_hold_time: float = 0.0
 var current_buy_delay: float = 0.0
 
-var music_config: MusicConfig
+var track: TowerTrack
 
 
 func _process(delta: float) -> void:

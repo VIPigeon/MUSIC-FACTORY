@@ -23,7 +23,9 @@ var game_rect: Rect2
 var state: State
 var survival_time: float
 var track_config: Array[MusicConfig]
+var sound_players: Dictionary
 
+var slam_enemy_scene := preload("res://game/slam_enemy/slam_enemy.tscn")
 var hud_scene := preload("uid://b20kj0ig0pnw4")
 var player_scene := preload("uid://kcxl4qh3oikg")
 
@@ -62,21 +64,26 @@ func create_base_game() -> void:
 	state = State.RUNNING
 
 	var costs: Array[int] = [10, 10, 30, 30, 60, 60, 60, 120]
-	track_config = [
-		MusicConfig.new(preload("res://resource/sound/drum1.wav"), 16),
-		MusicConfig.new(preload("res://resource/sound/drum2.wav"), 16),
-		MusicConfig.new(preload("res://resource/sound/drum3.wav"), 8),
-		MusicConfig.new(preload("res://resource/sound/drum4.wav"), 8),
-		MusicConfig.new(preload("res://resource/sound/synth1.wav"), 32),
-		MusicConfig.new(preload("res://resource/sound/synth2.wav"), 16),
-		MusicConfig.new(preload("res://resource/sound/synth3.wav"), 2),
-		MusicConfig.new(preload("res://resource/sound/synth4.wav"), 4),
-	]
+	var tracks_dir := "res://resource/tracks"
+	var track_files := DirAccess.get_files_at(tracks_dir)
+	var tracks: Array[TowerTrack]
+	for track_file in track_files:
+		var track := ResourceLoader.load(tracks_dir.path_join(track_file)) as TowerTrack
+		assert(track != null, "В папку %s импостора положили" % tracks_dir)
+		for sound in track.sounds:
+			if sound not in sound_players:
+				var audio_player := AudioStreamPlayer.new()
+				audio_player.stream = sound
+				audio_player.max_polyphony = 8
+				sound_players[sound] = audio_player
+				world_node.add_child(audio_player)
+				
+		tracks.append(track)
+		
+	generate_starting_field(costs, tracks)
 
-	generate_starting_field(costs, track_config)
 
-
-func generate_starting_field(costs: Array[int], music_config_: Array[MusicConfig]) -> void:
+func generate_starting_field(costs: Array[int], track_config: Array[TowerTrack]) -> void:
 	var pad := 8
 
 	var window_size := Vector2(
@@ -102,9 +109,16 @@ func generate_starting_field(costs: Array[int], music_config_: Array[MusicConfig
 
 	bullet_controller = BulletController.new(world_node)
 	tower_controller = TowerController.new(world_node, player_bank, player, bullet_controller)
-	tower_controller.tower_bought.connect(on_tower_bought)
+	tower_controller.tower_bought.connect(_on_tower_bought)
 	music_director = MusicDirector.new()
 	music_director.beat.connect(_on_beat)
+
+	# фу.. 🦍
+	var slam_enemy := slam_enemy_scene.instantiate()
+	var lane_y := game_rect.size.y * (0.75 if player.position.y < game_rect.size.y * 0.5 else 0.25)
+	slam_enemy.position = Vector2(game_rect.position.x + 8.0, lane_y)
+	world_node.add_child(slam_enemy)
+	slam_enemy.setup(music_director, game_rect)
 
 	var last: TowerOnSale
 	for i in range(len(costs)):
@@ -116,9 +130,14 @@ func generate_starting_field(costs: Array[int], music_config_: Array[MusicConfig
 			kind,
 			tower_position,
 			costs[i],
-			music_config_[i],
+			track_config[i],
 		)
-	tower_controller.on_tower_bought(last)
+	
+	if Config.dev_mode:
+		for tower in tower_controller.towers_on_sale:
+			tower_controller.on_tower_bought(tower)
+	else:
+		tower_controller.on_tower_bought(last)
 
 
 func random_position_in_rect(rect: Rect2) -> Vector2:
@@ -141,13 +160,18 @@ func create_speed_up() -> void:
 	create_base_game()
 
 
-func on_tower_bought() -> void:
+func _on_tower_bought() -> void:
 	if len(tower_controller.towers) == len(track_config):
 		start_endgame()
 
 
 func _on_beat(_tact: int, beat: int) -> void:
-	for tower in tower_controller.towers: 
-		var tact := tower.track.tacts[0]
-		if tact[beat] != '0':
+	for tower in tower_controller.towers:
+		assert(tower.track != null, "Кто-то неправильно настроил врага! Ай-яй-яй!")
+		var track := tower.track as TowerTrack
+		var sound_index := track.tacts[beat]
+		if sound_index != 0:
+			var sound := track.sounds[sound_index - 1]
 			tower.shoot()
+			print("PLAY ", beat, sound)
+			sound_players[sound].play()

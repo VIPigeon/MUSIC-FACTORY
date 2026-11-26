@@ -17,9 +17,13 @@ func _init() -> void:
 
 func tick(delta: float) -> void:
 	current_time += delta
-	if current_time > seconds_per_beat():
+	while current_time >= seconds_per_beat():
 		current_time -= seconds_per_beat()
 		on_beat()
+
+
+func progress() -> float:
+	return current_time / seconds_per_beat()
 
 
 func seconds_per_beat() -> float:

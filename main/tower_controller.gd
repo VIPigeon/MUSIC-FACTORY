@@ -3,6 +3,7 @@ class_name TowerController
 signal tower_bought
 
 var towers: Array[BaseTower]
+var towers_on_sale: Array[TowerOnSale]
 var bank: Bank
 var player: Player
 var bullet_controller: BulletController
@@ -44,14 +45,14 @@ func create_tower_on_sale(
 	kind: Tower.Kind,
 	position: Vector2,
 	cost: int,
-	music_config: MusicConfig,
+	track: TowerTrack,
 ) -> TowerOnSale:
 	var tower_on_sale := tower_on_sale_scene.instantiate()
 	tower_on_sale.kind = kind
 	tower_on_sale.cost = cost
 	tower_on_sale.position = position
 	tower_on_sale.bought.connect(on_tower_bought)
-	tower_on_sale.music_config = music_config
+	tower_on_sale.track = track
 	tower_on_sale.buy_tick.connect(
 		func():
 			if bank.spend(1):
@@ -63,6 +64,7 @@ func create_tower_on_sale(
 		LineShooter.setup_on_sale(tower_on_sale)
 	else:
 		tower_on_sale.sprite.play("inactive")
+	towers_on_sale.append(tower_on_sale)
 	return tower_on_sale
 
 
@@ -72,8 +74,7 @@ func on_tower_bought(tower_on_sale: TowerOnSale) -> void:
 	var tower: BaseTower = tower_scene_by_kind[kind].instantiate()
 	tower.kind = kind
 	tower.position = tower_on_sale.position
-	tower.sound = tower_on_sale.music_config.sound
-	tower.timing = tower_on_sale.music_config.timing
+	tower.track = tower_on_sale.track
 	if kind == Tower.Kind.PLAYER_SHOOTER:
 		tower.target = player
 	elif kind == Tower.Kind.LINE_SHOOTER:

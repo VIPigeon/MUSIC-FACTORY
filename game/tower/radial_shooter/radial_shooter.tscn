@@ -2,12 +2,6 @@
 
 [ext_resource type="Script" uid="uid://daex1jkqe5ao" path="res://game/tower/radial_shooter/radial_shooter.gd" id="1_1icpw"]
 [ext_resource type="SpriteFrames" uid="uid://b0dviuofy8rv7" path="res://game/tower/radial_shooter/sprite_frames.tres" id="2_1icpw"]
-[ext_resource type="AudioStream" uid="uid://crlbu1bhtiupm" path="res://resource/sound/synth1.wav" id="3_75qds"]
-
-[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_an11r"]
-random_pitch = 1.1892071
-streams_count = 1
-stream_0/stream = ExtResource("3_75qds")
 
 [node name="RadialShooter" type="Node2D" unique_id=1182200486]
 script = ExtResource("1_1icpw")
@@ -16,7 +10,3 @@ script = ExtResource("1_1icpw")
 sprite_frames = ExtResource("2_1icpw")
 animation = &"inactive"
 autoplay = "inactive"
-
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1566795744]
-stream = SubResource("AudioStreamRandomizer_an11r")
-volume_db = -5.0

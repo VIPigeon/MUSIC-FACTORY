@@ -14,6 +14,8 @@ class_name ConfigGlobal extends Node
 
 @export_category("Dev")
 @export var godmode: bool = false
+## Сразу покупаем все башни.
+@export var dev_mode: bool = false
 
 
 @export_category("Tower buy animation")

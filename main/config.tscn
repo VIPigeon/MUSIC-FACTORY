@@ -7,6 +7,7 @@ script = ExtResource("1_x1050")
 player_speed = 60.0
 bpm = 75.0
 godmode = true
+dev_mode = true
 tower_buy_animation_min_delay = 0.05
 tower_buy_animation_max_delay = 0.2
 tower_buy_animation_time_to_full_speed = 0.7

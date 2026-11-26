@@ -1,12 +1,17 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://d3vm2qri15dpw"]
 
-[ext_resource type="Texture2D" path="res://game/tower/line_shooter/xylophone_key_horizontal.png" id="1_horizontal"]
-[ext_resource type="Texture2D" path="res://game/tower/line_shooter/xylophone_key_vertical.png" id="2_vertical"]
+[ext_resource type="Texture2D" uid="uid://tk0fmb34h0kk" path="res://game/tower/line_shooter/xylophone_key_horizontal.png" id="1_horizontal"]
+[ext_resource type="Texture2D" uid="uid://ce45eues7w5ls" path="res://game/tower/line_shooter/xylophone_key_vertical.png" id="2_vertical"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h0"]
 atlas = ExtResource("1_horizontal")
 region = Rect2(6, 14, 23, 15)
 margin = Rect2(0, 0, 9, 11)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v0"]
+atlas = ExtResource("2_vertical")
+region = Rect2(3, 6, 9, 23)
+margin = Rect2(4, 0, 7, 9)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h1"]
 atlas = ExtResource("1_horizontal")
@@ -52,11 +57,6 @@ margin = Rect2(0, 0, 9, 11)
 atlas = ExtResource("1_horizontal")
 region = Rect2(294, 14, 23, 15)
 margin = Rect2(0, 0, 9, 11)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_v0"]
-atlas = ExtResource("2_vertical")
-region = Rect2(3, 6, 9, 23)
-margin = Rect2(4, 0, 7, 9)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v1"]
 atlas = ExtResource("2_vertical")
@@ -109,8 +109,16 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_h0")
 }],
-"loop": true,
+"loop": 1,
 "name": &"idle_horizontal",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v0")
+}],
+"loop": 1,
+"name": &"idle_vertical",
 "speed": 5.0
 }, {
 "frames": [{
@@ -144,17 +152,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_h9")
 }],
-"loop": false,
+"loop": 0,
 "name": &"shoot_horizontal",
 "speed": 15.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_v0")
-}],
-"loop": true,
-"name": &"idle_vertical",
-"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -187,7 +187,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_v9")
 }],
-"loop": false,
+"loop": 0,
 "name": &"shoot_vertical",
 "speed": 15.0
 }]
