@@ -17,12 +17,17 @@ var tower_scene_by_kind: Dictionary = {
 	Tower.Kind.PLAYER_SHOOTER: preload("uid://cddl2vlq7y4da"),
 	Tower.Kind.RADIAL_SHOOTER: preload("uid://c5rpryhtwlqdb"),
 	Tower.Kind.LINE_SHOOTER: preload("uid://cebhlbd5lvb1u"),
+	Tower.Kind.TRIANGLE: preload("uid://cvp6g6h0jx0co"),
 }
 var sprite_frames_by_kind: Dictionary = {
 	Tower.Kind.PLAYER_SHOOTER: preload("uid://cvex7dy365koe"),
 	Tower.Kind.RADIAL_SHOOTER: preload("uid://b0dviuofy8rv7"),
-	Tower.Kind.LINE_SHOOTER: preload("res://game/tower/line_shooter/sprite_frames.tres"),
+	Tower.Kind.LINE_SHOOTER: preload("uid://d3vm2qri15dpw"),
+	Tower.Kind.TRIANGLE: preload("uid://dg6srh3x4pdyq"),
 }
+
+# сколько заработано в каждой точке за этот кадр
+var earned_by_position: Dictionary[Vector2, int] = {}
 
 
 func _init(world_node_: Node2D, bank_: Bank, player_: Player, bullet_controller_: BulletController) -> void:
@@ -61,6 +66,8 @@ func create_tower_on_sale(
 	tower_on_sale.sprite.frames = sprite_frames_by_kind[kind]
 	if kind == Tower.Kind.LINE_SHOOTER:
 		LineShooter.setup_on_sale(tower_on_sale)
+	elif kind == Tower.Kind.TRIANGLE:
+		Triangle.setup_on_sale(tower_on_sale)
 	else:
 		tower_on_sale.sprite.play("inactive")
 	return tower_on_sale
@@ -91,7 +98,14 @@ func on_tower_bought(tower_on_sale: TowerOnSale) -> void:
 func award_money(position: Vector2, _direction: Vector2) -> void:
 	var amount := 1 # :(
 	bank.earn(amount)
+	if not earned_by_position.has(position):
+		show_earned_money.call_deferred(position)
+	earned_by_position[position] = earned_by_position.get(position, 0) + amount
+
+
+func show_earned_money(position: Vector2) -> void:
 	var vfx_earn_money := vfx_earn_money_scene.instantiate() as Label
-	vfx_earn_money.text = "+%d" % amount
+	vfx_earn_money.text = "+%d" % earned_by_position[position]
 	vfx_earn_money.position = position + Vector2(-6, -12)
 	world_node.add_child(vfx_earn_money)
+	earned_by_position.erase(position)
