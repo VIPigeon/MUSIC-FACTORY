@@ -4,23 +4,27 @@
 [ext_resource type="Resource" uid="uid://dy41qqansf5i3" path="res://game/tower/triangle/track.tres" id="2_track"]
 [ext_resource type="SpriteFrames" uid="uid://dg6srh3x4pdyq" path="res://game/tower/triangle/sprite_frames.tres" id="3_frames"]
 [ext_resource type="AudioStream" uid="uid://crlbu1bhtiupm" path="res://resource/sound/synth1.wav" id="4_sound"]
+[ext_resource type="Material" path="res://game/tower/triangle/alpha_cutoff.tres" id="5_material"]
 
-[node name="Triangle" type="Node2D"]
+[node name="Triangle" type="Node2D" unique_id=158051051]
 script = ExtResource("1_script")
 track = ExtResource("2_track")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=547034863]
+texture_filter = 4
+material = ExtResource("5_material")
+scale = Vector2(0.03125, 0.031185031)
 sprite_frames = ExtResource("3_frames")
 animation = &"idle"
 
-[node name="SplitArea" type="Area2D" parent="."]
+[node name="SplitArea" type="Area2D" parent="." unique_id=1656703348]
 collision_layer = 0
 collision_mask = 4
 monitorable = false
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SplitArea"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SplitArea" unique_id=831702065]
 polygon = PackedVector2Array(0, -7, -8, 5, 8, 5)
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1959200642]
 stream = ExtResource("4_sound")
 volume_db = -5.0
