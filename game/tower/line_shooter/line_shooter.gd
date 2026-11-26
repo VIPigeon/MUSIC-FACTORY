@@ -19,6 +19,7 @@ const ANIMATION_SUFFIX_BY_DIRECTION := {
 
 const INACTIVE_COLOR := Color(0.6, 0.6, 0.6)
 const SALE_DIRECTION_META := &"line_shooter_direction"
+const SHOT_OFFSET_DISTANCE := 9.0
 
 @export var direction := Direction.RIGHT
 
@@ -36,7 +37,8 @@ func _ready() -> void:
 
 func shoot() -> void:
 	play_animation(sprite, direction, "shoot")
-	super._shoot(VECTOR_BY_DIRECTION[direction])
+	var shot_direction: Vector2 = VECTOR_BY_DIRECTION[direction]
+	super._shoot(shot_direction, shot_direction * SHOT_OFFSET_DISTANCE)
 
 
 ## готовит клавишу на продаже: случайное направление и затемненный спрайт.
