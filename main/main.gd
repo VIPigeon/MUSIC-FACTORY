@@ -50,15 +50,15 @@ func on_victory() -> void:
 	delete_current_scene()
 	var victory_screen := victory_screen_scene.instantiate()
 	gui_node.add_child(victory_screen)
-	current_gameplay = null
 
 
 func on_loss() -> void:
-	print("LOSER!")
-	pass
+	delete_current_scene()
+	$DeathScreen.show()
 
 
 func delete_current_scene() -> void:
+	current_gameplay = null
 	for child in world_node.get_children():
 		child.queue_free()
 
