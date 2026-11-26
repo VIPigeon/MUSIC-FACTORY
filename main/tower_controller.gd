@@ -68,19 +68,35 @@ func create_tower_on_sale(
 	)
 
 	var tower_on_sale: TowerOnSale = tower_on_sale_scene.instantiate()
+	tower_for_sale_parent.add_child(tower_on_sale)
+	if owner != null:
+		tower_on_sale.owner = owner
+		Log.debug(
+			"Владелец для башни %s установлен как %s" % [tower_on_sale.name, tower_on_sale.owner]
+		)
+
 	tower_on_sale.kind = kind
 	tower_on_sale.cost = cost
 	tower_on_sale.position = position
-	tower_on_sale.bought.connect(on_tower_bought)
 	tower_on_sale.music_config = music_config
+
+	# Костыль. По какой-то причине, при запуске в редакторе у tower_on_sale нет
+	# полей с сигналами и полей с другими узлами, по типу Sprite2D. Я не знаю
+	# как это исправить.
+	if Engine.is_editor_hint():
+		Log.info(
+			"Создан TowerOnSale в редакторе с типом башни %s; стоимостью %s монет в позиции %s"
+			% [Tower.Kind.find_key(kind), cost, position]
+		)
+		return tower_on_sale
+
+	tower_on_sale.bought.connect(on_tower_bought)
 	tower_on_sale.buy_tick.connect(
 		func():
 			if bank.spend(1):
 				tower_on_sale.tick_buy(),
 	)
-	tower_for_sale_parent.add_child(tower_on_sale)
-	if owner != null:
-		tower_on_sale.owner = owner
+
 	tower_on_sale.sprite.frames = sprite_frames_by_kind[kind]
 	if kind == Tower.Kind.LINE_SHOOTER:
 		LineShooter.setup_on_sale(tower_on_sale)
