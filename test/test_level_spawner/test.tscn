@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://cyqsqr208epdh"]
+
+[ext_resource type="PackedScene" uid="uid://tctg5wok8uaa" path="res://test/test_level_spawner/test.tmx" id="1_sfaqk"]
+
+[node name="test" unique_id=1426692476 node_paths=PackedStringArray("tile_layers") instance=ExtResource("1_sfaqk")]
+tile_layers = {
+"color": NodePath("color"),
+"decor": NodePath("decor"),
+"spawn": NodePath("spawn"),
+"walls": NodePath("walls")
+}
+
+[node name="TowerOnSale" parent="TowerOnSaleContainer" parent_id_path=PackedInt32Array(631672254) index="0" unique_id=2082962370]
+cost = 20
+
+[node name="TowerOnSale2" parent="TowerOnSaleContainer" parent_id_path=PackedInt32Array(631672254) index="1" unique_id=79795722]
+cost = 20
+
+[node name="TowerOnSale3" parent="TowerOnSaleContainer" parent_id_path=PackedInt32Array(631672254) index="2" unique_id=1613848842]
+cost = 20
+
+[node name="TowerOnSale4" parent="TowerOnSaleContainer" parent_id_path=PackedInt32Array(631672254) index="3" unique_id=1750226156]
+cost = 20
+
+[node name="TowerOnSale5" parent="TowerOnSaleContainer" parent_id_path=PackedInt32Array(631672254) index="4" unique_id=1698848247]
+cost = 20
+
+[node name="TowerOnSale6" parent="TowerOnSaleContainer" parent_id_path=PackedInt32Array(631672254) index="5" unique_id=19378404]
+cost = 20
+
+[node name="TowerOnSale7" parent="TowerOnSaleContainer" parent_id_path=PackedInt32Array(631672254) index="6" unique_id=672884542]
+cost = 20
+
+[node name="TowerOnSale8" parent="TowerOnSaleContainer" parent_id_path=PackedInt32Array(631672254) index="7" unique_id=30155369]
+cost = 20

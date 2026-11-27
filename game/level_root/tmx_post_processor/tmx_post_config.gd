@@ -21,4 +21,4 @@ extends Resource
 @export var direction_key: String = "direction"
 
 ## По какому тегу и что спавнить?
-@export var spawn_map: Dictionary[String, Tower.Kind] = { }
+@export var spawn_map: Dictionary[String, PackedScene] = { }

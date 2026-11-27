@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bdyqi7d0h06vl"]
+
+[ext_resource type="PackedScene" uid="uid://deikrp0xtp5sx" path="res://game/tower/tower_on_sale/tower_on_sale.tscn" id="1_neipc"]
+[ext_resource type="PackedScene" uid="uid://cebhlbd5lvb1u" path="res://game/tower/line_shooter/line_shooter.tscn" id="2_jjr2w"]
+
+[node name="TestTowerOnSale" type="Node2D" unique_id=334506215]
+
+[node name="TowerContainer" type="Node2D" parent="." unique_id=1975012344]
+
+[node name="TowerOnSale" parent="." unique_id=2082962370 node_paths=PackedStringArray("tower_container") instance=ExtResource("1_neipc")]
+position = Vector2(179, 89)
+cost = 20
+tower_container = NodePath("../TowerContainer")
+tower_scene = ExtResource("2_jjr2w")

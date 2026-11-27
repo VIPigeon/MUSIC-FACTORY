@@ -17,17 +17,6 @@ signal spend_coins_request(coins: int)
 ## Зона покупки башни. Игрок должен находится в её пределах для вычета монет.
 @onready var buy_area: Area2DInsideChecker = $Area2D
 
-## Сколько осталось до покупки башни. Изначально равно [member cost].
-@onready var remain_cost: int = cost:
-	set(value):
-		remain_cost = value
-		if cost_label != null: # инициализируется раньше дочернего label
-			cost_label.text = str(remain_cost)
-		if Engine.is_editor_hint():
-			update_configuration_warnings()
-
-## Фильтр цвета для неактивной башни.
-@export var inactive_color_filter: Color = Color.DIM_GRAY
 
 ## Стоимость покупки башни.[br]
 ## [br]
@@ -37,32 +26,86 @@ signal spend_coins_request(coins: int)
 		cost = value
 		remain_cost = cost
 
-## Какую башню (сцену) спавнить.
-@export var tower_scene: PackedScene:
-	set(value):
-		tower_scene = value
-		if Engine.is_editor_hint():
-			update_configuration_warnings()
+## Конфигурация музыки башни.
+@export var music_config: MusicConfig
+
+## Фильтр цвета для неактивной башни.
+@export var inactive_color_filter: Color = Color(0.412, 0.412, 0.412, 0.784)
 
 ## Направление, в котором спавнить башню.
 @export var direction: Vector2 = Vector2.DOWN
-
-## Конфигурация музыки башни.
-@export var music_config: MusicConfig
 
 ## Под каким узлом создавать башню.[br]
 ## [br]
 ## Если этот параметр не определён, то башня создаётся под родителем магазина,
 ## то есть будет соседом (sibling) магазина.
-var tower_container: Node = null
+@export var tower_container: Node:
+	set(value):
+		if tower_container == value:
+			return
+
+		tower_container = value
+		if Engine.is_editor_hint():
+			update_configuration_warnings()
+
+		if _tower == null or tower_container == null:
+			return
+
+		if _tower.is_inside_tree():
+			_tower.reparent(tower_container)
+		else:
+			tower_container.add_child(_tower)
+
+## Какую башню (сцену) спавнить.
+@export var tower_scene: PackedScene:
+	set(value):
+		tower_scene = value
+
+		if Engine.is_editor_hint():
+			update_configuration_warnings()
+
+		if tower_scene == null:
+			_tower = null
+			return
+
+		_tower = tower_scene.instantiate()
+
+
+## Сколько осталось до покупки башни. Изначально равно [member cost].
+var remain_cost: int = cost:
+	set(value):
+		remain_cost = value
+		if cost_label != null: # инициализируется раньше дочернего label
+			cost_label.text = str(remain_cost)
+		if Engine.is_editor_hint():
+			update_configuration_warnings()
+
+var _tower: Node2D = null:
+	set(value):
+		if _tower != null:
+			_tower.queue_free()
+
+		_tower = value
+		if _tower == null:
+			return
+
+		_tower.process_mode = Node.PROCESS_MODE_DISABLED
+		_tower_orignal_modulate = _tower.modulate
+		_tower.modulate = inactive_color_filter
+		_tower.global_position = global_position
+
+		if _tower.get_parent() != null:
+			return
+
+		# отложенный запуск, ибо контейнер может ещё не существовать.
+		_assing_parent_to_tower.call_deferred()
+
+var _tower_orignal_modulate: Color = Color.WHITE
 
 var _hold_time: float = 0.0
 var _time_since_buy_request: float = 0.0
 var _current_buy_delay: float = 0.0
 var _is_player_inside: bool = false
-
-var _tower: Node2D = null
-var _tower_orignal_modulate: Color = Color.WHITE
 
 
 func _ready() -> void:
@@ -71,29 +114,23 @@ func _ready() -> void:
 
 	if cost < 0:
 		Log.warn("Стоимость башни не определена (меньше 0)")
+	remain_cost = cost
 
-	if tower_container == null:
-		Log.warn(
-			"Не указан контейнер для башни, башня будет создана как сосед магазина с родителем %s"
-			% get_parent().name
-		)
-		tower_container = get_parent()
-
-	if tower_scene == null:
-		Log.err("Не указана сцена башни для магазина, спавнить нечего, магазин отключается")
+	if _tower == null:
+		Log.err("Башня не была создана, магазин отключается. Ошибка конфигурации?")
 		deactivate()
 		return
 
-	# Добавить отключенную башню как образ.
-	_tower = tower_scene.instantiate()
-	_tower.process_mode = Node.PROCESS_MODE_DISABLED
-	_tower_orignal_modulate = _tower.modulate
-	_tower.modulate = inactive_color_filter
-	_tower.position = position
-	tower_container.add_child.call_deferred(_tower)
-
 	if remain_cost == 0:
 		_spawn_tower()
+
+
+func _exit_tree() -> void:
+	if not Engine.is_editor_hint():
+		return
+
+	if _tower != null:
+		_tower.queue_free()
 
 
 func _process(delta: float) -> void:
@@ -129,6 +166,10 @@ func _get_configuration_warnings() -> PackedStringArray:
 
 	if tower_scene == null:
 		var msg := "Не указана сцена башни. Неизвестно, что спавнить при покупке."
+		warnings.push_back(msg)
+
+	if tower_container == null:
+		var msg := "Не указан контейнер для спавна башни."
 		warnings.push_back(msg)
 
 	return warnings
@@ -187,3 +228,15 @@ func _spawn_tower() -> void:
 	bought.emit(self)
 	deactivate()
 	Log.info("Новая башня куплена, стоимость = %s, название = %s" % [cost, _tower.name])
+
+
+func _assing_parent_to_tower() -> void:
+	if _tower.get_parent() != null:
+		return
+
+	if tower_container == null:
+		add_sibling(_tower)
+		if not Engine.is_editor_hint():
+			Log.warn("Не указан контейнер для башни, башня будет создана как сосед магазина")
+	else:
+		tower_container.add_child(_tower)
