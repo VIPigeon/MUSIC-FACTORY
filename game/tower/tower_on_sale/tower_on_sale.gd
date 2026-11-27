@@ -125,12 +125,16 @@ func _ready() -> void:
 		_spawn_tower()
 
 
+func _enter_tree() -> void:
+	if not Engine.is_editor_hint():
+		return
+	tower_scene = tower_scene # триггер сеттера
+
+
 func _exit_tree() -> void:
 	if not Engine.is_editor_hint():
 		return
-
-	if _tower != null:
-		_tower.queue_free()
+	_tower = null
 
 
 func _process(delta: float) -> void:
@@ -199,7 +203,7 @@ func spend_coins(spent: int = 1) -> void:
 
 
 ## Отключает магазин и прекращает его отображение. Вызывается автоматически
-## после покупки башни.
+## после покупки башни вместе с сигналом [signal bought].
 func deactivate() -> void:
 	hide()
 	process_mode = Node.PROCESS_MODE_DISABLED
