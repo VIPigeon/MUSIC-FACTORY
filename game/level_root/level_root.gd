@@ -38,10 +38,39 @@ class TileInfo extends RefCounted:
 
 ## Слой со спавном сущностей.
 @export var spawn_layer: TileMapLayer = null
+
 ## Слой со стенами локации.
 @export var wall_layer: TileMapLayer = null
+
 ## Все тайловые слои уровня по их именам.
 @export var tile_layers: Dictionary[String, TileMapLayer] = { }
+
+## Узел-контейнер для башен, добавляемых через [TowerOnSale].
+@export var towers_container: Node2D = null
+
+## Узел-контейнер для [TowerOnSale].
+@export var towers_on_sale_container: Node2D = null
+
+var _towers_on_sale: Array[TowerOnSale] = []
+var _active_towers: Dictionary[Node2D, bool] = { } # типа сет
+var _inactive_towers: Dictionary[Node2D, bool] = { } # типа сет
+
+
+func _ready() -> void:
+	# _towers_on_sale
+	for child: Node in towers_on_sale_container.get_children():
+		if child is TowerOnSale:
+			_towers_on_sale.push_back(child as TowerOnSale)
+
+	# _inactive_towers & _active_towers
+	for child: Node in towers_container.get_children():
+		if child is not Node2D:
+			continue
+		var tower: Node2D = child as Node2D
+		if tower.process_mode == Node.PROCESS_MODE_DISABLED:
+			_inactive_towers[tower] = true # добавить в сет
+		else:
+			_active_towers[tower] = true # добавить в сет
 
 
 ## Найти слой уровня [TileMapLayer] по названию его узла. [br]
@@ -123,6 +152,34 @@ func is_spawn_at(cell: Vector2i) -> bool:
 ## [param global_pos] - позиция в глобальных координатах.
 func is_spawn_at_global(global_pos: Vector2) -> bool:
 	return is_spawn_at(global_to_tile(global_pos))
+
+
+## Возвращает массив со всеми магазинами башен [TowerOnSale] в этом уровне.
+func get_towers_on_sale() -> Array[TowerOnSale]:
+	return _towers_on_sale
+
+
+## Возвращает все ещё не купленные башни.
+func get_inactive_towers() -> Array[Node2D]:
+	return _inactive_towers.keys()
+
+
+## Возвращает уже купленные башни.
+func get_active_towers() -> Array[Node2D]:
+	return _active_towers.keys()
+
+
+# Купленная башня теперь должна быть среди активированных.
+func _on_tower_bought(tower: Node2D) -> void:
+	if not _inactive_towers.has(tower):
+		Log.warn(
+			"Новая купленная башня '%s' не была указана как неактивная.
+			Она добавлена другим скриптом?"
+			% tower.name
+		)
+		return
+	_inactive_towers.erase(tower)
+	_active_towers[tower] = true
 
 
 ## Получить опорный слой для перевода координат. [br]
