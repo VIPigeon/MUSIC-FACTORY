@@ -30,14 +30,29 @@ var sprite_frames_by_kind: Dictionary = {
 var earned_by_position: Dictionary[Vector2, int] = {}
 
 
-func _init(world_node_: Node2D, bank_: Bank, player_: Player, bullet_controller_: BulletController) -> void:
+func _init(
+	world_node_: Node2D,
+	bank_: Bank,
+	player_: Player,
+	bullet_controller_: BulletController,
+	owner: Node = null, # нужно, если башни потом надо сохранить вместе с уровнем
+) -> void:
 	tower_parent = Node2D.new()
 	tower_parent.name = "Towers"
 	world_node_.add_child(tower_parent)
+	if owner != null:
+		tower_parent.owner = owner
+	Log.info("Создан узел для башен %s с названием %s" % [tower_parent, tower_parent.name])
 
 	tower_for_sale_parent = Node2D.new()
 	tower_for_sale_parent.name = "TowersForSale"
 	world_node_.add_child(tower_for_sale_parent)
+	if owner != null:
+		tower_for_sale_parent.owner = owner
+	Log.info(
+		"Создан узел для башен на продажу %s с названием %s"
+		% [tower_for_sale_parent, tower_for_sale_parent.name]
+	)
 
 	self.bank = bank_
 	self.player = player_
@@ -50,19 +65,43 @@ func create_tower_on_sale(
 	position: Vector2,
 	cost: int,
 	music_config: MusicConfig,
+	owner: Node = null, # нужно, если башню потом надо сохранить вместе с уровнем
 ) -> TowerOnSale:
-	var tower_on_sale := tower_on_sale_scene.instantiate()
+	Log.debug(
+		"Начало создания TowerOnSale с типом башни %s; стоимостью %s монет в позиции %s"
+		% [Tower.Kind.find_key(kind), cost, position]
+	)
+
+	var tower_on_sale: TowerOnSale = tower_on_sale_scene.instantiate()
+	tower_for_sale_parent.add_child(tower_on_sale)
+	if owner != null:
+		tower_on_sale.owner = owner
+		Log.debug(
+			"Владелец для башни %s установлен как %s" % [tower_on_sale.name, tower_on_sale.owner]
+		)
+
 	tower_on_sale.kind = kind
 	tower_on_sale.cost = cost
 	tower_on_sale.position = position
-	tower_on_sale.bought.connect(on_tower_bought)
 	tower_on_sale.music_config = music_config
+
+	# Костыль. По какой-то причине, при запуске в редакторе у tower_on_sale нет
+	# полей с сигналами и полей с другими узлами, по типу Sprite2D. Я не знаю
+	# как это исправить.
+	if Engine.is_editor_hint():
+		Log.info(
+			"Создан TowerOnSale в редакторе с типом башни %s; стоимостью %s монет в позиции %s"
+			% [Tower.Kind.find_key(kind), cost, position]
+		)
+		return tower_on_sale
+
+	tower_on_sale.bought.connect(on_tower_bought)
 	tower_on_sale.buy_tick.connect(
 		func():
 			if bank.spend(1):
 				tower_on_sale.tick_buy(),
 	)
-	tower_for_sale_parent.add_child(tower_on_sale)
+
 	tower_on_sale.sprite.frames = sprite_frames_by_kind[kind]
 	if kind == Tower.Kind.LINE_SHOOTER:
 		LineShooter.setup_on_sale(tower_on_sale)
@@ -70,6 +109,11 @@ func create_tower_on_sale(
 		Triangle.setup_on_sale(tower_on_sale)
 	else:
 		tower_on_sale.sprite.play("inactive")
+
+	Log.info(
+		"Создан TowerOnSale с типом башни %s; стоимостью %s монет в позиции %s"
+		% [Tower.Kind.find_key(kind), cost, position]
+	)
 	return tower_on_sale
 
 

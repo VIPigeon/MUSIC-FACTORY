@@ -77,6 +77,8 @@ move_down={
 [log_gd]
 
 config/timestamp_type=4
+config/show_log_level_selector=true
+config/show_timestamps=true
 
 [physics]
 

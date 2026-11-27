@@ -1,6 +1,11 @@
 class_name LineShooter extends BaseTower
 
-enum Direction { RIGHT, LEFT, DOWN, UP }
+enum Direction {
+	RIGHT,
+	LEFT,
+	DOWN,
+	UP,
+}
 
 const VECTOR_BY_DIRECTION := {
 	Direction.RIGHT: Vector2.RIGHT,
@@ -39,6 +44,7 @@ func shoot() -> void:
 	super._shoot(VECTOR_BY_DIRECTION[direction])
 
 
+# NOTE насколько я понимаю, с новым TowerOnSale в этой функции нет смысла. Дима.
 ## готовит клавишу на продаже: случайное направление и затемненный спрайт.
 static func setup_on_sale(tower_on_sale: TowerOnSale) -> void:
 	# TODO пока направление случайное

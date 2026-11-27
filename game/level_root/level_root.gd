@@ -36,58 +36,60 @@ class TileInfo extends RefCounted:
 		return data.get_meta_list()
 
 
-## Конфиг для работы с уровнем.
-var spawn_config: SpawnConfig = preload("res://game/level_root/spawn_config.tres")
-
-## Тайловые слои по именам.
-var _tile_layers: Dictionary[String, TileMapLayer] = { }
-## Упорядоченный список всех тайловых слоёв в изначальном порядке.
-var _ordered_layers: Array[TileMapLayer] = []
 ## Слой со спавном сущностей.
-var _spawn_layer = null
+@export var spawn_layer: TileMapLayer = null
+
 ## Слой со стенами локации.
-var _wall_layer = null
+@export var wall_layer: TileMapLayer = null
+
+## Все тайловые слои уровня по их именам.
+@export var tile_layers: Dictionary[String, TileMapLayer] = { }
+
+## Узел-контейнер для башен, добавляемых через [TowerOnSale].
+@export var towers_container: Node2D = null
+
+## Узел-контейнер для [TowerOnSale].
+@export var towers_on_sale_container: Node2D = null
+
+var _towers_on_sale: Array[TowerOnSale] = []
+var _active_towers: Dictionary[Node2D, bool] = { } # типа сет
+var _inactive_towers: Dictionary[Node2D, bool] = { } # типа сет
 
 
 func _ready() -> void:
-	_cache_tile_layers()
+	# _towers_on_sale
+	for child: Node in towers_on_sale_container.get_children():
+		if child is TowerOnSale:
+			_towers_on_sale.push_back(child as TowerOnSale)
 
-	if not spawn_config:
-		Log.err("Отсутствует конфигурация для спавна объектов")
-		return
-
-	if not _spawn_layer:
-		Log.warn("Слой для спавна противников '%s' не обнаружен" % spawn_config.spawn_layer_name)
-		return
-
-	var used_cells: Array[Vector2i] = _spawn_layer.get_used_cells()
-	for cell in used_cells:
-		_process_spawn_cell(_spawn_layer, cell)
-
-
-## Закэшировать текущие тайловые слои, чтобы в дальнейшем не обходить всех детей. [br]
-func _cache_tile_layers() -> void:
-	_tile_layers.clear()
-	_ordered_layers.clear()
-	for child in get_children():
-		if child is TileMapLayer:
-			_tile_layers[child.name] = child
-			_ordered_layers.append(child)
-
-	if spawn_config:
-		_spawn_layer = _tile_layers.get(spawn_config.spawn_layer_name)
-		_wall_layer = _tile_layers.get(spawn_config.wall_layer_name)
+	# _inactive_towers & _active_towers
+	for child: Node in towers_container.get_children():
+		if child is not Node2D:
+			continue
+		var tower: Node2D = child as Node2D
+		if tower.process_mode == Node.PROCESS_MODE_DISABLED:
+			_inactive_towers[tower] = true # добавить в сет
+		else:
+			_active_towers[tower] = true # добавить в сет
 
 
 ## Найти слой уровня [TileMapLayer] по названию его узла. [br]
-## Работает по кэшу, без обхода детей. [br]
+## Работает по кэшу преобразования из tmx, без фактического обхода детей. [br]
 ## [br]
 ## [param layer_name] - [String] с названием узла.
 func find_layer_by_name(layer_name: String) -> TileMapLayer:
-	var layer: TileMapLayer = _tile_layers.get(layer_name)
+	var layer: TileMapLayer = tile_layers.get(layer_name)
 	if not layer:
 		Log.warn("Попытка найти слой уровня с названием '%s', но такой не обнаружен" % layer_name)
 	return layer
+
+
+## Содержится ли слой уровня [TileMapLayer] с таким названием. [br]
+## Работает по кэшу преобразования из tmx, без фактического обхода детей. [br]
+## [br]
+## [param layer_name] - [String] с названием узла.
+func has_layer_name(layer_name: String) -> bool:
+	return tile_layers.has(layer_name)
 
 
 ## Перевести глобальные вещественные координаты в тайловые. [br]
@@ -106,7 +108,7 @@ func global_to_tile(global_pos: Vector2) -> Vector2i:
 ## [param cell] - координаты ячейки.
 func get_tiles_at(cell: Vector2i) -> Array[TileInfo]:
 	var result: Array[TileInfo] = []
-	for layer in _ordered_layers:
+	for layer in tile_layers.values():
 		var info := TileInfo.new(layer, cell)
 		if not info.is_empty():
 			result.append(info)
@@ -124,9 +126,9 @@ func get_tiles_at_global(global_pos: Vector2) -> Array[TileInfo]:
 ## [br]
 ## [param cell] - координаты ячейки.
 func is_wall_at(cell: Vector2i) -> bool:
-	if not _wall_layer:
+	if not wall_layer:
 		return false
-	return _wall_layer.get_cell_tile_data(cell) != null
+	return wall_layer.get_cell_tile_data(cell) != null
 
 
 ## Проверить наличие стены по глобальным координатам. [br]
@@ -140,9 +142,9 @@ func is_wall_at_global(global_pos: Vector2) -> bool:
 ## [br]
 ## [param cell] - координаты ячейки.
 func is_spawn_at(cell: Vector2i) -> bool:
-	if not _spawn_layer:
+	if not spawn_layer:
 		return false
-	return _spawn_layer.get_cell_tile_data(cell) != null
+	return spawn_layer.get_cell_tile_data(cell) != null
 
 
 ## Проверить наличие спавна по глобальным координатам. [br]
@@ -152,69 +154,45 @@ func is_spawn_at_global(global_pos: Vector2) -> bool:
 	return is_spawn_at(global_to_tile(global_pos))
 
 
+## Возвращает массив со всеми магазинами башен [TowerOnSale] в этом уровне.
+func get_towers_on_sale() -> Array[TowerOnSale]:
+	return _towers_on_sale
+
+
+## Возвращает все ещё не купленные башни.
+func get_inactive_towers() -> Array[Node2D]:
+	return _inactive_towers.keys()
+
+
+## Возвращает уже купленные башни.
+func get_active_towers() -> Array[Node2D]:
+	return _active_towers.keys()
+
+
+# Купленная башня теперь должна быть среди активированных.
+func _on_tower_bought(tower: Node2D) -> void:
+	if not _inactive_towers.has(tower):
+		Log.warn(
+			"Новая купленная башня '%s' не была указана как неактивная.
+			Она добавлена другим скриптом?"
+			% tower.name
+		)
+		return
+	_inactive_towers.erase(tower)
+	_active_towers[tower] = true
+
+
 ## Получить опорный слой для перевода координат. [br]
 ## Приоритет: стены -> спавн -> первый попавшийся слой.
 func _get_reference_layer() -> TileMapLayer:
-	if _wall_layer:
-		return _wall_layer
-	if _spawn_layer:
-		return _spawn_layer
-	if not _ordered_layers.is_empty():
-		return _ordered_layers[0]
+	if wall_layer:
+		Log.debug("Слой со стенами взят в качестве опорного для перевода координат")
+		return wall_layer
+	if spawn_layer:
+		Log.debug("Слой со спавном взят в качестве опорного для перевода координат")
+		return spawn_layer
+	if not tile_layers.is_empty():
+		Log.debug("Взят первый попавшийся слой в качестве опорного для перевода координат")
+		return tile_layers.values()[0]
+	Log.debug("Опорный слой не найден")
 	return null
-
-
-## Обработать тайлы под спавн.
-func _process_spawn_cell(layer: TileMapLayer, cell: Vector2i) -> void:
-	var cnt: int = 0
-	var spawn_map: Dictionary[String, PackedScene] = spawn_config.spawn_map
-	for key: String in spawn_map.keys():
-		if not layer.get_cell_tile_data(cell).has_meta(key):
-			continue
-		cnt += 1
-
-		var instance: Node2D = spawn_map[key].instantiate() as Node2D
-		if instance == null:
-			Log.err("Сцена для ключа '%s' не является Node2D" % key)
-			continue
-
-		instance.position = layer.map_to_local(cell)
-		add_child(instance)
-
-		var direction: Vector2 = _get_tile_direction(layer, cell)
-		var look_point: Vector2 = direction + instance.global_position
-		instance.look_at(look_point)
-
-	if cnt == 0:
-		Log.warn("Ячейка в позиции %s ничего не заспавнила" % [cell])
-	elif cnt > 0:
-		layer.erase_cell(cell)
-
-	if cnt > 1:
-		Log.warn("Ячейка в позиции %s совпадает с несколькими ключами" % [cell])
-
-
-## Получить направление тайла.
-func _get_tile_direction(layer: TileMapLayer, cell: Vector2i) -> Vector2:
-	var tile_data: TileData = layer.get_cell_tile_data(cell)
-	if not tile_data.has_meta(spawn_config.direction_key):
-		Log.warn(
-			"У тайла в позиции %s не найден ключ направления '%s'"
-			% [cell, spawn_config.direction_key]
-		)
-		return Vector2.DOWN # дефолтное значение
-
-	var map_direction: Dictionary[String, Vector2] = {
-		"up": Vector2.UP,
-		"right": Vector2.RIGHT,
-		"down": Vector2.DOWN,
-		"left": Vector2.LEFT,
-	}
-	var direction_str: String = tile_data.get_meta(spawn_config.direction_key)
-	direction_str = direction_str.to_lower()
-
-	if not map_direction.has(direction_str):
-		Log.warn("У тайла в позиции %s неизвестное направление '%s'" % [cell, direction_str])
-		return Vector2.DOWN # дефолтное значение
-
-	return map_direction[direction_str]
