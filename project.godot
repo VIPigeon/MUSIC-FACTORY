@@ -77,7 +77,6 @@ move_down={
 [log_gd]
 
 config/timestamp_type=4
-config/log_level=0
 config/show_log_level_selector=true
 config/show_timestamps=true
 
