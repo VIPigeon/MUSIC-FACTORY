@@ -100,6 +100,8 @@ var _tower: Node2D = null:
 
 		# отложенный запуск, ибо контейнер может ещё не существовать.
 		_assign_parent_to_tower.call_deferred()
+		# и направления тоже ещё может не быть.
+		_assign_direction.call_deferred()
 
 var _tower_orignal_modulate: Color = Color.WHITE
 
@@ -296,3 +298,15 @@ func _assign_parent_to_tower() -> void:
 			Log.warn("Не указан контейнер для башни, башня будет создана как сосед магазина")
 	else:
 		tower_container.add_child(_tower)
+
+
+func _assign_direction() -> void:
+	# TODO я хз как это для других башен потом делать. Нужен какой-то общий интерфейс.
+	if _tower is LineShooter:
+		var line_direction: LineShooter.Direction = LineShooter.VECTOR_BY_DIRECTION.find_key(
+			direction
+		)
+		Log.debug(
+			"Для башни установлено направление %s" % LineShooter.Direction.find_key(line_direction)
+		)
+		_tower.direction = line_direction

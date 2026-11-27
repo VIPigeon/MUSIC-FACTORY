@@ -1,6 +1,11 @@
 class_name LineShooter extends BaseTower
 
-enum Direction { RIGHT, LEFT, DOWN, UP }
+enum Direction {
+	RIGHT,
+	LEFT,
+	DOWN,
+	UP,
+}
 
 const VECTOR_BY_DIRECTION := {
 	Direction.RIGHT: Vector2.RIGHT,
@@ -31,6 +36,7 @@ func shoot() -> void:
 	super._shoot(VECTOR_BY_DIRECTION[direction])
 
 
+# NOTE насколько я понимаю, с новым TowerOnSale в этой функции нет смысла. Дима.
 ## готовит клавишу на продаже: случайное направление и затемненный спрайт.
 static func setup_on_sale(tower_on_sale: TowerOnSale) -> void:
 	# TODO пока направление случайное
@@ -46,7 +52,11 @@ func take_direction_from(tower_on_sale: TowerOnSale) -> void:
 	direction = tower_on_sale.get_meta(SALE_DIRECTION_META)
 
 
-static func play_animation(sprite_: AnimatedSprite2D, direction_: Direction, action: String) -> void:
+static func play_animation(
+	sprite_: AnimatedSprite2D,
+	direction_: Direction,
+	action: String,
+) -> void:
 	var horizontal := direction_ == Direction.RIGHT or direction_ == Direction.LEFT
 	sprite_.flip_h = direction_ == Direction.LEFT
 	sprite_.flip_v = direction_ == Direction.UP
